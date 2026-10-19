@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useSpeech } from "@/hooks/useSpeech";
+import { useSpeech, useWordSpeaker } from "@/hooks/useSpeech";
 import { cn } from "@/lib/cn";
 import { checkSpelling } from "@/lib/spelling";
 import type { AssessmentActivity, AssessmentItem, AssessmentResponse, HearAndTypeItem, SoundMatchItem } from "@/lib/types";
@@ -137,7 +137,7 @@ function NextButton({ onClick, label }: { onClick: () => void; label: string }) 
 /* ---------- Section 1: Spelling (design 1) ---------- */
 
 function HearAndType({ item, onDone }: { item: HearAndTypeItem; onDone: (r: AssessmentResponse) => void }) {
-  const speech = useSpeech();
+  const speech = useWordSpeaker(item.answer, item.syllables);
   const [typed, setTyped] = useState("");
   const [state, setState] = useState<"idle" | "correct" | "incorrect">("idle");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
@@ -212,9 +212,9 @@ function HearAndType({ item, onDone }: { item: HearAndTypeItem; onDone: (r: Asse
         <div className="mt-4 flex justify-center xl:absolute xl:left-full xl:top-1/2 xl:mt-0 xl:ml-6 xl:-translate-y-1/2">
           <IconControl
             icon={<SpeakerIcon size="4.4rem" />}
-            label={speech.available ? "Hear the word" : "Sound is not available in this browser"}
+            label={speech.available ? (speech.nextInParts ? "Hear the word in parts" : "Hear the word") : "Sound is not available in this browser"}
             disabled={!speech.available}
-            onClick={() => void speech.say(item.answer)}
+            onClick={speech.hear}
           />
         </div>
       </div>

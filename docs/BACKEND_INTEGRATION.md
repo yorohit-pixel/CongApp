@@ -90,7 +90,8 @@ Already connected when `NEXT_PUBLIC_API_URL` is set:
 |---|---|---|
 | `getAssessmentItems(grade)` | `GET /quiz?grade=` | 10 random dataset words, easiest → hardest, mixed word types. The sound-match section still comes from `src/data/seed.ts`. |
 | `submitAssessment(grade, responses)` | `POST /students/:id/quiz` | Each first-try spelling goes through `recordMistake`; `findWords` picks **list 1**. `practiceAreas` = the recommender's top 3 word types. |
-| `getRecommendations()` | `GET /students/:id/word-list` | The current 10-word list (`Recommendation.setNumber`), shown on "Practice for you" as "Word list N". |
+| `skipAssessment(grade)` | `POST /students/:id/start` | The check-in is optional. Skipping saves the grade, sets `onboardingComplete`, and list 1 is picked from the grade alone. |
+| `getRecommendations()` | `GET /students/:id/word-list` | The current 10-word list (`Recommendation.setNumber`), shown on "Practice for you" as "Word list N". The words themselves are never listed there (only during practice), so the page can't give spellings away. |
 | `submitSessionResult(result)` for `"personalized"` | `POST /students/:id/word-list/answers` | First full run of the list only: answers (`WordAttempt.firstTyped`) go through `recordMistake`, the level adjusts, and `findWords` picks the next list. |
 
 - The student id is `profile.id` (a new one per demo visit). Replace it with the signed-in user's id when accounts exist.

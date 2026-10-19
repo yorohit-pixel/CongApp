@@ -41,7 +41,8 @@ Then in the website folder, copy `.env.example` to `.env.local` (it has `NEXT_PU
 |---|---|---|---|
 | GET | `/quiz?grade=3` | — | `{grade, words: Word[10]}` easiest → hardest |
 | POST | `/students/{id}/quiz` | `{grade, answers: [{word, typed}]}` | `WordList` (list 1) |
-| GET | `/students/{id}/word-list` | — | `WordList` (404 before the quiz) |
+| POST | `/students/{id}/start` | `{grade}` | `WordList`: list 1 from the grade alone, for students who skip the check-in (keeps existing lists) |
+| GET | `/students/{id}/word-list` | — | `WordList` (404 before the quiz or skip) |
 | POST | `/students/{id}/word-list/answers` | `{answers: [{word, typed}]}` | `WordList` (the next list) |
 | GET | `/students/{id}` | — | Everything saved for the student |
 | GET | `/health` | — | Word counts |
@@ -49,6 +50,7 @@ Then in the website folder, copy `.env.example` to `.env.local` (it has `NEXT_PU
 - `Word` = `{id, word, definition, difficulty, syllables[], types[]}`
 - `WordList` = `{studentId, setNumber, targetDifficulty, words: Word[10], focusAreas: [{tag, label, tip, example, missed}], lastScore: {correct, total}}`
 - `typed` is the student's **first try**.
+- `lastScore` is `null` for a student who skipped the check-in and hasn't finished a list yet.
 - The student id comes from the website. Each new demo visit is a new student.
 
 ## Notes for changing things

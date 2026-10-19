@@ -37,8 +37,8 @@ export default function PersonalizedPage() {
           <p className="max-w-3xl text-xl text-ink">
             {setNumber
               ? setNumber === 1
-                ? "These 10 words were picked from your answers in the check-in. Spell them all, and Buzz will use your answers to pick your next 10."
-                : `These 10 words were picked from your answers in list ${setNumber - 1}. Spell them all, and Buzz will use your answers to pick your next 10.`
+                ? "Your first 10 words were picked just for you. Spell them all, and Buzz will use your answers to pick your next 10."
+                : `Your 10 words were picked from your answers in list ${setNumber - 1}. Spell them all, and Buzz will use your answers to pick your next 10.`
               : "We looked at the words you found tricky and picked more words with the same spelling patterns from our word bank."}
           </p>
           {data.rec.focusAreas.length > 0 && (
@@ -59,17 +59,10 @@ export default function PersonalizedPage() {
             </section>
           )}
 
-          <section aria-labelledby="words-heading" className="mt-10">
-            <HandHeading id="words-heading">Your practice words</HandHeading>
-            <ul className="mt-4 flex flex-wrap gap-3">
-              {data.rec.words.map((w) => (
-                <li key={w.id} className="flex min-h-[4rem] flex-col justify-center rounded-full border border-black bg-white px-7 py-2 text-center">
-                  <span className="text-[1.35rem] font-bold text-ink">{w.text}</span>
-                  <span className="text-sm font-semibold text-ink/80">{data.rec.focusAreas.find((f) => f.pattern.tag === w.matchedPattern)?.pattern.label}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
+          {/* The words themselves stay hidden until practice, so seeing them can't give the spelling away. */}
+          <p className="mt-10 text-center text-xl font-bold text-ink">
+            {data.rec.words.length} words are waiting in your hive. Listen to each one and spell it!
+          </p>
 
           <div className="mt-10 flex justify-center">
             <PillLink href={`/practice/${PERSONALIZED_SOURCE_ID}`} variant="gold" size="lg" icon={<ArrowRightIcon size="2.2rem" />}>

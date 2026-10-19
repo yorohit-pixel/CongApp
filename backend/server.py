@@ -38,10 +38,11 @@ MIN_DIFFICULTY = 7
 MAX_DIFFICULTY = 120
 
 # The dataset's "difficulty" runs from about 5 ("so", "go") to 230 (very rare words).
-# Each grade's quiz goes from an easy word to a harder one inside this range.
+# Each grade's quiz climbs from the first number to the second, so higher grades
+# start harder and end much harder (e.g. grade 3 ends near "obligation", grade 8 near "unspeakable").
 GRADE_DIFFICULTY = {
-    0: (7, 12), 1: (7, 15), 2: (8, 18), 3: (9, 22), 4: (10, 26),
-    5: (11, 30), 6: (12, 34), 7: (13, 38), 8: (14, 42),
+    0: (8, 16), 1: (9, 20), 2: (10, 26), 3: (12, 32), 4: (14, 38),
+    5: (16, 44), 6: (18, 50), 7: (20, 56), 8: (22, 62),
 }
 
 STUDENTS_DIR = Path(__file__).with_name("students")
@@ -78,6 +79,10 @@ class QuizAnswers(BaseModel):
 
 class ListAnswers(BaseModel):
     answers: list[Answer]
+
+
+class StartBody(BaseModel):
+    grade: int = Field(ge=0, le=8)
 
 
 # ---------- Helpers ----------
@@ -226,7 +231,7 @@ def list_out(state):
         "targetDifficulty": state["targetDifficulty"],
         "words": state["currentList"],
         "focusAreas": state["focusAreas"],
-        "lastScore": state["sets"][-1]["score"] if state["sets"] else state["quiz"]["score"],
+        "lastScore": state["sets"][-1]["score"] if state["sets"] else (state["quiz"] or {}).get("score"),
     }
 
 
@@ -247,34 +252,52 @@ def get_quiz(grade: int = Query(ge=0, le=8)):
     return {"grade": grade, "words": [word_out(entry) for entry in pick_quiz(grade)]}
 
 
-@app.post("/students/{student_id}/quiz")
-def submit_quiz(student_id: str, body: QuizAnswers):
-    """Save the quiz answers and build the student's first 10-word list."""
-    if not body.answers:
-        raise HTTPException(status_code=400, detail="Please answer at least one word.")
-    state = {
+def new_student(student_id, grade, target_difficulty, quiz):
+    student_path(student_id)  # validates the id before any work
+    return {
         "id": student_id,
-        "grade": body.grade,
+        "grade": grade,
         "createdAt": now(),
         "updatedAt": now(),
         "patternTally": [],
         "mistakeTypeTally": [],
         # Don't recommend the quiz words straight away.
-        "previousRecommendations": [recommender.normalise_word(a.word) for a in body.answers],
-        "targetDifficulty": starting_difficulty(body.grade, body.answers),
+        "previousRecommendations": [recommender.normalise_word(a["word"]) for a in (quiz or {}).get("answers", [])],
+        "targetDifficulty": target_difficulty,
         "setNumber": 0,
         "currentList": [],
         "focusAreas": [],
-        "quiz": {
-            "completedAt": now(),
-            "answers": [{**a.model_dump(), "correct": is_correct(a)} for a in body.answers],
-            "score": score_of(body.answers),
-        },
+        "quiz": quiz,  # None when the student skipped the check-in
         "sets": [],
     }
-    student_path(student_id)  # validates the id before any work
+
+
+@app.post("/students/{student_id}/quiz")
+def submit_quiz(student_id: str, body: QuizAnswers):
+    """Save the quiz answers and build the student's first 10-word list."""
+    if not body.answers:
+        raise HTTPException(status_code=400, detail="Please answer at least one word.")
+    quiz = {
+        "completedAt": now(),
+        "answers": [{**a.model_dump(), "correct": is_correct(a)} for a in body.answers],
+        "score": score_of(body.answers),
+    }
+    state = new_student(student_id, body.grade, starting_difficulty(body.grade, body.answers), quiz)
     run_recommender(state, body.answers)
     save_student(state)
+    return list_out(state)
+
+
+@app.post("/students/{student_id}/start")
+def start_without_quiz(student_id: str, body: StartBody):
+    """The student skipped the check-in: build list 1 from their grade alone.
+    Keeps an existing student's lists if they already have some."""
+    state = load_student(student_id)
+    if state is None:
+        low, high = GRADE_DIFFICULTY[body.grade]
+        state = new_student(student_id, body.grade, (low + high) // 2, None)
+        run_recommender(state, [])
+        save_student(state)
     return list_out(state)
 
 

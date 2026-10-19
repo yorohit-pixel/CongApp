@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PageShell } from "@/components/layout/PageShell";
 import { AssessmentIntro } from "@/components/onboarding/AssessmentIntro";
@@ -10,7 +11,7 @@ import { VisibilityStep } from "@/components/onboarding/VisibilityStep";
 import { WelcomeScreen } from "@/components/onboarding/WelcomeScreen";
 import { LoadingState } from "@/components/ui/Status";
 import { useBuddy } from "@/context/BuddyProvider";
-import { getAssessmentItems, getProfile, submitAssessment, updateProfile } from "@/services";
+import { getAssessmentItems, getProfile, skipAssessment, submitAssessment, updateProfile } from "@/services";
 import type { AssessmentItem, AssessmentSummary, Grade, StudentProfile } from "@/lib/types";
 
 type Step =
@@ -42,6 +43,7 @@ export default function OnboardingPage() {
   const [step, setStep] = useState<Step>({ name: "loading" });
   const [profile, setProfile] = useState<StudentProfile | null>(null);
   const buddy = useBuddy();
+  const router = useRouter();
 
   useEffect(() => {
     void getProfile().then((p) => {
@@ -78,7 +80,18 @@ export default function OnboardingPage() {
           }}
         />
       )}
-      {step.name === "intro" && <AssessmentIntro items={step.items} onStart={() => setStep({ ...step, name: "test" })} />}
+      {step.name === "intro" && (
+        <AssessmentIntro
+          items={step.items}
+          onStart={() => setStep({ ...step, name: "test" })}
+          onSkip={async () => {
+            setStep({ name: "saving" });
+            await skipAssessment(step.grade);
+            buddy.refresh();
+            router.push("/");
+          }}
+        />
+      )}
       {step.name === "test" && (
         <AssessmentRunner
           items={step.items}

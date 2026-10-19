@@ -36,7 +36,7 @@ export interface MockDb {
 }
 
 // Bump the version when the seed data changes so old demo data isn't reused.
-const STORAGE_KEY = "bee-spelling-demo-v2";
+const STORAGE_KEY = "bee-spelling-demo-v3";
 
 /**
  * DEMO: every new visit (new tab or window) starts as a brand-new student,

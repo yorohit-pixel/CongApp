@@ -4,7 +4,7 @@ import { ArrowRightIcon } from "../ui/Icons";
 import { PillButton } from "../ui/PillButton";
 
 /** Shown before the test: what each section is and how many questions it has. */
-export function AssessmentIntro({ onStart, items }: { onStart: () => void; items: AssessmentItem[] }) {
+export function AssessmentIntro({ onStart, onSkip, items }: { onStart: () => void; onSkip: () => void; items: AssessmentItem[] }) {
   const spelling = items.filter((i) => i.activity === "hear-and-type").length;
   const soundMatch = items.filter((i) => i.activity === "sound-match").length;
   const sections = [
@@ -27,12 +27,18 @@ export function AssessmentIntro({ onStart, items }: { onStart: () => void; items
       <p className="mt-6 text-base text-ink/85">
         This is a check-in to choose practice words. It is not a test for dyslexia or any other learning difference.
       </p>
-      <PillButton size="lg" variant="gold" className="mt-6" onClick={onStart} icon={<ArrowRightIcon size="2.4rem" />}>
-        Start section 1
-      </PillButton>
+      <div className="mt-6 flex flex-wrap justify-center gap-4">
+        <PillButton size="lg" variant="gold" onClick={onStart} icon={<ArrowRightIcon size="2.4rem" />}>
+          Start section 1
+        </PillButton>
+        <PillButton size="lg" onClick={onSkip}>
+          Skip for now
+        </PillButton>
+      </div>
+      <p className="mt-3 text-base text-ink/85">The check-in is optional. You can take it later from Settings → My profile.</p>
       <BuzzSays
         className="mt-12 w-full text-left"
-        text={`The check-in has ${sections.length} sections. It's okay if some words are tricky. That just shows us what to practice!`}
+        text={`The check-in has ${sections.length} sections. It's okay if some words are tricky. That just shows us what to practice! Or skip it, and I'll pick words for your grade.`}
       />
     </div>
   );

@@ -115,24 +115,61 @@ function friendlyLabel(name: string): string {
   return natural ? `${short} (natural)` : short;
 }
 
-/** Speaks text out loud in Buzz's friendly voice. Resolves false when speech is not available. */
+/**
+ * The utterance being spoken. Chrome can garbage-collect an utterance mid-speech
+ * (then it never fires onend), so we keep a reference until it finishes.
+ */
+let currentUtterance: SpeechSynthesisUtterance | null = null;
+/** Bumped by every new speak() / stopSpeaking(), so older chunked speech knows to stop. */
+let speechToken = 0;
+
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Speaks text out loud in Buzz's friendly voice.
+ * Resolves true when it finished, false if it was interrupted, failed, or speech isn't available.
+ * A false result does NOT mean speech is broken — the next call works again.
+ */
 export async function speak(
   text: string,
   opts: { language?: Language; rate?: SpeechRate; voiceName?: string | null } = {},
 ): Promise<boolean> {
   if (!isSpeechAvailable()) return false;
+  const token = ++speechToken;
   const lang = LANG_CODES[opts.language ?? "en"];
   const voice = await pickVoice(lang, opts.voiceName);
-  return new Promise((resolve) => {
-    const synth = window.speechSynthesis;
+  if (token !== speechToken) return false; // a newer request came in while voices loaded
+
+  const synth = window.speechSynthesis;
+  if (synth.speaking || synth.pending) {
     synth.cancel();
+    // Chrome drops a speak() that comes in the same moment as cancel().
+    await wait(80);
+    if (token !== speechToken) return false;
+  }
+  // Chrome sometimes leaves the queue paused; speak() then silently does nothing.
+  synth.resume();
+
+  return new Promise((resolve) => {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = voice?.lang ?? lang;
     utterance.rate = RATES[opts.rate ?? "slow"];
     utterance.pitch = BUZZ_PITCH;
     if (voice) utterance.voice = voice;
-    utterance.onend = () => resolve(true);
-    utterance.onerror = () => resolve(false);
+
+    let settled = false;
+    const finish = (ok: boolean) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(safety);
+      if (currentUtterance === utterance) currentUtterance = null;
+      resolve(ok);
+    };
+    // If the browser never reports the end, don't leave the app waiting forever.
+    const safety = setTimeout(() => finish(true), 3000 + text.length * 250);
+    utterance.onend = () => finish(true);
+    utterance.onerror = () => finish(false);
+    currentUtterance = utterance;
     synth.speak(utterance);
   });
 }
@@ -148,11 +185,28 @@ export async function speakInChunks(
   for (const chunk of chunks) {
     const ok = await speak(chunk, { language, rate: "slow", voiceName });
     if (!ok) return false;
-    await new Promise((r) => setTimeout(r, 250));
+    await wait(250);
   }
   return speak(word, { language, rate: "slow", voiceName });
 }
 
+/** Says a word one syllable at a time ("fam … i … ly"), without the whole word. */
+export async function speakSyllables(
+  word: string,
+  syllables: string[] | undefined,
+  language: Language = "en",
+  voiceName?: string | null,
+): Promise<boolean> {
+  const chunks = syllables && syllables.length > 1 ? syllables : [word];
+  for (const chunk of chunks) {
+    const ok = await speak(chunk, { language, rate: "slow", voiceName });
+    if (!ok) return false;
+    await wait(350);
+  }
+  return true;
+}
+
 export function stopSpeaking(): void {
+  speechToken++;
   if (isSpeechAvailable()) window.speechSynthesis.cancel();
 }

@@ -70,7 +70,8 @@ export interface ApiWordList {
   targetDifficulty: number;
   words: ApiWord[];
   focusAreas: ApiFocusArea[];
-  lastScore: { correct: number; total: number };
+  /** null when the student skipped the check-in and hasn't finished a list yet. */
+  lastScore: { correct: number; total: number } | null;
 }
 
 /** One answer sent to the recommender: the right word and the student's first try. */

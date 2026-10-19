@@ -119,6 +119,23 @@ export async function submitAssessment(grade: Grade, responses: AssessmentRespon
   return delay(summary, 300);
 }
 
+/**
+ * The check-in is optional. Skipping saves the grade and lets the student into the app.
+ * With the backend on, list 1 is then picked from the grade alone (POST /students/:id/start).
+ */
+export async function skipAssessment(grade: Grade): Promise<void> {
+  if (usingBackend()) {
+    const list = await api<ApiWordList>(`/students/${encodeURIComponent(studentId())}/start`, {
+      method: "POST",
+      body: JSON.stringify({ grade }),
+    });
+    rememberWordList(list);
+  }
+  db().profile = { ...db().profile, grade, onboardingComplete: true };
+  persist();
+  await delay(null, 60);
+}
+
 export async function getLatestAssessment(): Promise<AssessmentSummary | null> {
   return delay(db().assessment, 60);
 }

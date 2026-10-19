@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useSettings } from "@/context/SettingsProvider";
 import { usePracticeSession } from "@/hooks/usePracticeSession";
-import { useSpeech } from "@/hooks/useSpeech";
+import { useSpeech, useWordSpeaker } from "@/hooks/useSpeech";
 import type { PracticeItem, WordAttempt } from "@/lib/types";
 import { BeeTrack } from "../layout/BeeTrack";
 import { IconControl } from "../ui/IconControl";
@@ -35,6 +35,7 @@ export function PracticeRunner({
   const inputRef = useRef<HTMLInputElement>(null);
   const reported = useRef(false);
   const { current, item, progress } = session;
+  const speaker = useWordSpeaker(current?.answer ?? "", current?.syllables, current?.language);
 
   // Report results once when the session finishes.
   useEffect(() => {
@@ -65,7 +66,7 @@ export function PracticeRunner({
     session.next();
   };
 
-  const hearWord = () => void speech.say(current.answer, current.language);
+  const hearWord = speaker.hear;
   const readOnly = item.status === "correct";
 
   return (
@@ -111,7 +112,7 @@ export function PracticeRunner({
           <div className="mt-4 flex items-start justify-center gap-6 xl:absolute xl:left-full xl:top-1/2 xl:mt-0 xl:ml-6 xl:-translate-y-1/2 xl:gap-3">
             <IconControl
               icon={<SpeakerIcon size="4.4rem" />}
-              label={speech.available ? "Hear the word" : "Sound is not available in this browser"}
+              label={speech.available ? (speaker.nextInParts ? "Hear the word in parts" : "Hear the word") : "Sound is not available in this browser"}
               onClick={hearWord}
               disabled={!speech.available}
             />

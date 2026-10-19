@@ -19,29 +19,8 @@ function fromBank(ids: string[]): SetWord[] {
 
 /* ---------- MOCK: the student's own sets ---------- */
 
-export const SEED_MY_SETS: WordSet[] = [
-  {
-    id: "set-b-d",
-    title: "b and d words",
-    description: "Words with the look-alike letters b, d and p.",
-    language: "en",
-    words: fromBank([
-      "w-bed", "w-dog", "w-big", "w-dig", "w-bat", "w-duck",
-      "w-desk", "w-pond", "w-bird", "w-puddle",
-    ]),
-    createdAt: "2026-09-02T16:00:00.000Z",
-    updatedAt: "2026-10-12T16:00:00.000Z",
-  },
-  {
-    id: "set-week6",
-    title: "Week 6 spelling",
-    description: "Magic e words for Friday's spelling check.",
-    language: "en",
-    words: fromBank(["w-cake", "w-bike", "w-home", "w-smile", "w-stone", "w-shape", "w-whale", "w-flute"]),
-    createdAt: "2026-10-05T16:00:00.000Z",
-    updatedAt: "2026-10-05T16:00:00.000Z",
-  },
-];
+/* New students start with no sets of their own; they make them on the Create page. */
+export const SEED_MY_SETS: WordSet[] = [];
 
 /* ---------- MOCK: sets shared by other users ---------- */
 
@@ -134,23 +113,6 @@ function attempt(id: string, typed: string, correct: boolean, tries = 1, usedHin
 }
 
 export const SEED_HISTORY: SessionResult[] = [
-  {
-    id: "res-seed-1",
-    sourceId: "set-week6",
-    sourceKind: "my-set",
-    title: "Week 6 spelling",
-    completedAt: "2026-10-08T22:00:00.000Z",
-    attempts: [
-      attempt("w-cake", "cake", true),
-      attempt("w-bike", "bik", false, 2),
-      attempt("w-home", "home", true),
-      attempt("w-smile", "smil", false, 2, true),
-      attempt("w-stone", "stone", true),
-      attempt("w-shape", "shap", false, 2),
-      attempt("w-whale", "wale", false, 2),
-      attempt("w-flute", "flute", true, 2),
-    ],
-  },
   {
     id: "res-seed-2",
     sourceId: "cs-vowel-teams",
