@@ -53,7 +53,7 @@ export function BuzzSays({
             className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-full px-2 text-base font-bold text-ink underline underline-offset-4 hover:bg-black/5"
           >
             <SpeakerIcon size="1.4rem" />
-            Read it to me
+            Read It to Me
           </button>
         )}
       </div>

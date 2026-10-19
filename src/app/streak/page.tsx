@@ -14,7 +14,7 @@ export default function StreakPage() {
   const { hive, name } = useBuddy();
   if (!hive) {
     return (
-      <PageShell title="My streak">
+      <PageShell title="My Streak">
         <LoadingState />
       </PageShell>
     );
@@ -28,7 +28,7 @@ export default function StreakPage() {
       : "Start a streak today! Do one practice or one game, then come back tomorrow.";
 
   return (
-    <PageShell title="My streak">
+    <PageShell title="My Streak">
       <div className="mx-auto grid max-w-5xl gap-8">
         <div className="card-pop flex flex-col items-center gap-6 rounded-[2.5rem] bg-white px-6 py-8 text-center sm:flex-row sm:justify-center sm:gap-10">
           <FlameIcon size="6rem" />
@@ -44,7 +44,7 @@ export default function StreakPage() {
 
         <section aria-labelledby="week-heading" className="card-pop rounded-[2.5rem] bg-white p-7">
           <h2 id="week-heading" className="text-2xl font-bold text-ink">
-            This week
+            This Week
           </h2>
           <ol className="mt-4 grid grid-cols-7 gap-2 text-center">
             {lastSevenDays.map((day, i) => {
@@ -68,7 +68,7 @@ export default function StreakPage() {
 
         <section aria-labelledby="goals-heading" className="card-pop rounded-[2.5rem] bg-white p-7">
           <h2 id="goals-heading" className="text-2xl font-bold text-ink">
-            Streak goals
+            Streak Goals
           </h2>
           <p className="mt-1 text-lg text-ink">Next goal: {nextGoal} days in a row.</p>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">

@@ -51,12 +51,12 @@ export default function PracticePage() {
     <PageShell title={title} layout={results ? "browse" : "focus"} withBeeTrack={!results && activeItems.length > 0}>
       {loading && <LoadingState label="Getting your words ready…" />}
       {!loading && (error || !session) && (
-        <ErrorState message="We couldn't find that word set." action={<PillLink href="/">Go home</PillLink>} />
+        <ErrorState message="We couldn't find that word set." action={<PillLink href="/">Go Home</PillLink>} />
       )}
       {session && session.items.length === 0 && (
         <ErrorState
           message="There are no words to practice here yet."
-          action={<PillLink href={session.sourceKind === "my-set" ? `/my-words/${session.sourceId}/edit` : "/"}>Add some words</PillLink>}
+          action={<PillLink href={session.sourceKind === "my-set" ? `/my-words/${session.sourceId}/edit` : "/"}>Add Some Words</PillLink>}
         />
       )}
       {session && activeItems.length > 0 && !results && (

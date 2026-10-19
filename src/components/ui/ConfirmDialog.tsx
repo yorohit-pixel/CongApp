@@ -44,7 +44,7 @@ export function ConfirmDialog({
       <p className="mt-3 text-lg">{message}</p>
       <div className="mt-7 flex flex-wrap justify-end gap-3">
         <PillButton onClick={onCancel} autoFocus>
-          Keep it
+          Keep It
         </PillButton>
         <PillButton variant="gold" onClick={onConfirm}>
           {confirmLabel}

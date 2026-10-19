@@ -16,7 +16,7 @@ export function GameLoader({ game }: { game: GameKind }) {
 
   if (loading) return <LoadingState label="Picking words…" />;
   if (error || !data || data.length === 0) {
-    return <ErrorState message="We couldn't find words for this game." action={<PillLink href="/games">Back to games</PillLink>} />;
+    return <ErrorState message="We couldn't find words for this game." action={<PillLink href="/games">Back to Games</PillLink>} />;
   }
   const playAgain = () => setPlayCount((n) => n + 1);
   return game === "letter-detective" ? (

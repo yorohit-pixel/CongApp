@@ -27,7 +27,7 @@ export default function CommunitySetPage() {
   return (
     <PageShell title={set?.title ?? "Community set"}>
       {loading && <LoadingState />}
-      {!loading && !set && <ErrorState message="We couldn't find that set." action={<PillLink href="/community">Back to Community sets</PillLink>} />}
+      {!loading && !set && <ErrorState message="We couldn't find that set." action={<PillLink href="/community">Back to Community Sets</PillLink>} />}
       {set && (
         <div className="mx-auto max-w-5xl">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -66,13 +66,13 @@ export default function CommunitySetPage() {
               <Notice tone="success" className="mt-6">
                 ✓ Saved! You can find it in{" "}
                 <Link href={`/my-words/${savedCopy.id}`} className="underline underline-offset-4">
-                  My words
+                  My Words
                 </Link>{" "}
                 and change it however you like.
               </Notice>
             )}
           </div>
-          <h2 className="mt-10 text-2xl font-bold text-ink">Words in this set</h2>
+          <h2 className="mt-10 text-2xl font-bold text-ink">Words in This Set</h2>
           <WordList words={set.words} language={set.language} className="mt-4" />
         </div>
       )}

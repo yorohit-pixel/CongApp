@@ -4,10 +4,13 @@
  * the balance there before a purchase. Thrown errors are shown to the child.
  */
 import { findAccessory } from "@/data/accessories";
+import { computeBadges } from "@/lib/badges";
 import { honeyDrops } from "@/lib/honey";
 import { computeStreak } from "@/lib/streak";
 import type { AccessoryId, AccessorySlot, GameResultInput, HiveState } from "@/lib/types";
+import { getLatestAssessment } from "./assessment";
 import { db, delay, persist } from "./mock/db";
+import { getHistory, getProgressSummary } from "./progress";
 
 function buildHive(): HiveState {
   const { history, hive } = db();
@@ -30,12 +33,39 @@ export async function getHive(): Promise<HiveState> {
 export async function buyAccessory(id: AccessoryId): Promise<HiveState> {
   const item = findAccessory(id);
   if (!item) throw new Error("We couldn't find that item.");
+  if (item.badgesNeeded !== undefined) throw new Error("This one can't be bought. Earn badges to unlock it!");
   const hive = db().hive;
   if (hive.owned.includes(id)) return delay(buildHive(), 60);
   const { balance } = buildHive().honey;
   if (balance < item.price) throw new Error(`You need ${item.price - balance} more honey drops for that. Keep practicing!`);
   hive.spent += item.price;
   hive.owned.push(id);
+  hive.equipped[item.slot] = id; // put it on straight away
+  persist();
+  return delay(buildHive(), 120);
+}
+
+/** How many badges the student has earned (badges are worked out from progress, see lib/badges.ts). */
+export async function getEarnedBadgeCount(): Promise<number> {
+  const [summary, history, assessment] = await Promise.all([getProgressSummary(), getHistory(), getLatestAssessment()]);
+  return computeBadges(summary, history, assessment, buildHive()).filter((b) => b.earned).length;
+}
+
+/**
+ * Badge prizes are free clothes, unlocked by earning enough badges.
+ * BACKEND: check the badge count on the server before adding it.
+ */
+export async function claimBadgePrize(id: AccessoryId): Promise<HiveState> {
+  const item = findAccessory(id);
+  if (!item || item.badgesNeeded === undefined) throw new Error("We couldn't find that prize.");
+  const hive = db().hive;
+  if (!hive.owned.includes(id)) {
+    const earned = await getEarnedBadgeCount();
+    if (earned < item.badgesNeeded) {
+      throw new Error(`Earn ${item.badgesNeeded - earned} more ${item.badgesNeeded - earned === 1 ? "badge" : "badges"} to unlock this!`);
+    }
+    hive.owned.push(id);
+  }
   hive.equipped[item.slot] = id; // put it on straight away
   persist();
   return delay(buildHive(), 120);

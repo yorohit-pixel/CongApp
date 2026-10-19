@@ -25,14 +25,14 @@ type Step =
   | { name: "summary"; summary: AssessmentSummary };
 
 const TITLES: Record<Step["name"], string> = {
-  loading: "Bee Spelling",
-  welcome: "Bee Spelling",
-  visibility: "Get set up",
-  grade: "About you",
-  intro: "personalization test",
-  test: "personalization test",
-  saving: "personalization test",
-  summary: "personalization test",
+  loading: "BuzzWords",
+  welcome: "BuzzWords",
+  visibility: "Get Set Up",
+  grade: "About You",
+  intro: "Personalization Test",
+  test: "Personalization Test",
+  saving: "Personalization Test",
+  summary: "Personalization Test",
 };
 
 /**

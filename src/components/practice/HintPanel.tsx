@@ -35,7 +35,7 @@ export function HintPanel({
             className="mt-3 inline-flex min-h-12 items-center gap-2 rounded-full border border-black bg-white px-5 text-lg font-bold text-ink hover:bg-[#FFF6DA]"
           >
             <SpeakerIcon size="1.4em" className="text-black" />
-            Hear it in chunks
+            Hear It in Chunks
           </button>
         )}
       </div>

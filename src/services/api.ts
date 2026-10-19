@@ -120,7 +120,7 @@ export function toBankWord(word: ApiWord, grade: number): BankWord {
     patterns: toPatternTags(word),
     difficulty: toDifficulty(word.difficulty),
     gradeLevel: grade,
-    category: "Recommended for you",
+    category: "Recommended for You",
   };
 }
 

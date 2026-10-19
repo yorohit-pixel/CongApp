@@ -9,7 +9,7 @@ export function AssessmentIntro({ onStart, onSkip, items }: { onStart: () => voi
   const soundMatch = items.filter((i) => i.activity === "sound-match").length;
   const sections = [
     { title: "Spelling", text: `${spelling} words. Listen to each word, then type it. They start easy and get harder.` },
-    ...(soundMatch > 0 ? [{ title: "Sound match", text: `${soundMatch} questions. Find words with the same sound.` }] : []),
+    ...(soundMatch > 0 ? [{ title: "Sound Match", text: `${soundMatch} questions. Find words with the same sound.` }] : []),
   ];
   return (
     <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
@@ -29,10 +29,10 @@ export function AssessmentIntro({ onStart, onSkip, items }: { onStart: () => voi
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-4">
         <PillButton size="lg" variant="gold" onClick={onStart} icon={<ArrowRightIcon size="2.4rem" />}>
-          Start section 1
+          Start Section 1
         </PillButton>
         <PillButton size="lg" onClick={onSkip}>
-          Skip for now
+          Skip for Now
         </PillButton>
       </div>
       <p className="mt-3 text-base text-ink/85">The check-in is optional. You can take it later from Settings → My profile.</p>

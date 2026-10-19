@@ -136,8 +136,8 @@ export function SetEditor({
       </div>
 
       <fieldset className="mt-8 card-pop rounded-[2.5rem] bg-white p-6 sm:p-10">
-        <legend className="sr-only">Add a word</legend>
-        <h2 className="text-2xl font-bold text-ink">Add words</h2>
+        <legend className="sr-only">Add a Word</legend>
+        <h2 className="text-2xl font-bold text-ink">Add Words</h2>
         <p className="mt-1 text-base text-ink/80">Tip: type several words with commas between them to add them all at once.</p>
         <div className="mt-5 grid gap-4 md:grid-cols-[1fr_1fr_auto] md:items-end">
           <TextField

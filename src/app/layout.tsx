@@ -10,7 +10,7 @@ const patrickHand = Patrick_Hand({ subsets: ["latin"], weight: "400", variable: 
 const atkinson = Atkinson_Hyperlegible({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-atkinson", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Bee Spelling",
+  title: "BuzzWords",
   description: "Friendly reading and spelling practice for kids, one word at a time.",
   icons: { icon: "/favicon.svg" },
 };

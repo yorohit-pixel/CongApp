@@ -27,7 +27,7 @@ export function PageShell({ title, children, layout = "browse", tightTop = false
   return (
     <div className="honeycomb-page flex min-h-screen flex-col bg-cream">
       <a href="#main" className="skip-link">
-        Skip to main content
+        Skip to Main Content
       </a>
       <AppHeader title={title} showNav={!hideNav} />
       <main

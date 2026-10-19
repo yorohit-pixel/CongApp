@@ -19,7 +19,7 @@ export function TintPicker({ className }: { className?: string }) {
   const { settings, updateSettings } = useSettings();
   return (
     <fieldset className={className}>
-      <legend className="mb-1 text-xl font-bold text-ink">Page colour</legend>
+      <legend className="mb-1 text-xl font-bold text-ink">Page Colour</legend>
       <p className="mb-3 text-base text-ink/80">Some readers find words easier to see on a coloured page.</p>
       <div className="flex flex-wrap gap-3">
         {TINTS.map((tint) => {

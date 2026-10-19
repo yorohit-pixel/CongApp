@@ -1,4 +1,4 @@
-# Bee Spelling backend (Python)
+# BuzzWords backend (Python)
 
 A small FastAPI server around `spelling_recommender.py`. It gives the website:
 

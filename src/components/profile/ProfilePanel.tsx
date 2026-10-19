@@ -95,7 +95,7 @@ export function ProfilePanel() {
 
       <div className="grid gap-8">
         <section aria-labelledby="progress-heading">
-          <HandHeading id="progress-heading">My progress</HandHeading>
+          <HandHeading id="progress-heading">My Progress</HandHeading>
           <dl className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-3">
             {[
               ["Practice sessions", summary.sessionsCompleted],
@@ -115,7 +115,7 @@ export function ProfilePanel() {
           <FlameIcon size="4rem" />
           <div className="min-w-[10rem] flex-1">
             <h2 id="streak-heading" className="text-2xl font-bold text-ink">
-              My streak
+              My Streak
             </h2>
             <p className="text-lg text-ink">
               <span className="text-[2rem] font-bold">{streak?.current ?? summary.streakDays}</span>{" "}
@@ -124,17 +124,17 @@ export function ProfilePanel() {
             {streak && <p className="text-base text-ink">{streak.practicedToday ? "✓ You practiced today!" : "Practice today to keep it going."}</p>}
           </div>
           <PillLink href="/streak" variant="gold">
-            See my streak
+            See My Streak
           </PillLink>
         </section>
 
         <section aria-labelledby="badges-heading" className="card-pop rounded-[2.5rem] bg-white p-7 sm:p-9">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2 id="badges-heading" className="text-2xl font-bold text-ink">
-              My badges
+              My Badges
             </h2>
             <PillLink href="/badges" variant="gold">
-              See all badges
+              See All Badges
             </PillLink>
           </div>
           <div className="mt-3">
@@ -144,13 +144,13 @@ export function ProfilePanel() {
 
         <section aria-labelledby="test-heading" className="card-pop rounded-[2.5rem] bg-white p-7 sm:p-9">
           <h2 id="test-heading" className="text-2xl font-bold text-ink">
-            Personalization test
+            Personalization Test
           </h2>
           {assessment ? (
             <>
               <div className="mt-3 grid gap-5 md:grid-cols-2">
                 <div>
-                  <h3 className="text-lg font-bold text-ink">Things you're good at</h3>
+                  <h3 className="text-lg font-bold text-ink">Things You're Good At</h3>
                   <ul className="mt-2 list-disc space-y-1 pl-6 text-lg text-ink">
                     {assessment.strengths.map((s) => (
                       <li key={s}>{s}</li>
@@ -158,7 +158,7 @@ export function ProfilePanel() {
                   </ul>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-ink">Patterns to practice</h3>
+                  <h3 className="text-lg font-bold text-ink">Patterns to Practice</h3>
                   {assessment.practiceAreas.length ? (
                     <ul className="mt-2 list-disc space-y-1 pl-6 text-lg text-ink">
                       {assessment.practiceAreas.map((p) => (
@@ -182,7 +182,7 @@ export function ProfilePanel() {
 
         <section aria-labelledby="recent-heading">
           <h2 id="recent-heading" className="text-2xl font-bold text-ink">
-            Recent practice
+            Recent Practice
           </h2>
           {history.length === 0 ? (
             <p className="mt-2 text-lg text-ink">No practice yet.</p>
@@ -206,17 +206,17 @@ export function ProfilePanel() {
 
         <section aria-labelledby="demo-heading" className="rounded-[2rem] border-2 border-dashed border-ink/40 p-6">
           <h2 id="demo-heading" className="text-lg font-bold text-ink">
-            Demo tools
+            Demo Tools
           </h2>
           <p className="mt-1 text-base text-ink">Puts all the sample sets, history and settings back to how they started.</p>
           <PillButton className="mt-3" onClick={() => setConfirmReset(true)}>
-            Reset demo data
+            Reset Demo Data
           </PillButton>
         </section>
       </div>
       <ConfirmDialog
         open={confirmReset}
-        title="Reset the demo?"
+        title="Reset the Demo?"
         message="Your sets, practice history and settings in this browser will go back to the sample data."
         confirmLabel="Reset"
         onCancel={() => setConfirmReset(false)}
@@ -234,7 +234,7 @@ export function ProfilePanel() {
 function SpellingAnswers({ answers }: { answers: Array<{ itemId: string; word: string; typed: string; correct: boolean }> }) {
   return (
     <div className="mt-6">
-      <h3 className="text-lg font-bold text-ink">My spelling words from the test</h3>
+      <h3 className="text-lg font-bold text-ink">My Spelling Words From the Test</h3>
       <table className="mt-2 w-full border-separate border-spacing-y-2 text-left text-lg text-ink">
         <thead>
           <tr className="text-base">

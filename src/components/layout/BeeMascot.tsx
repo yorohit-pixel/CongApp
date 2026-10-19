@@ -4,10 +4,10 @@ import { BeeAccessories } from "./BeeAccessories";
 
 /** Body / stripe / wing colours for each bee buddy colour. The header bee is always gold. */
 export const BEE_COLORS: Record<BeeColor, { label: string; body: string; stripes: string; wings: string }> = {
-  gold: { label: "Honey gold", body: "#FDB104", stripes: "#2F497B", wings: "#2F497B" },
-  navy: { label: "Night blue", body: "#2F497B", stripes: "#FDB104", wings: "#8FB3E8" },
-  green: { label: "Leaf green", body: "#7ED957", stripes: "#2F497B", wings: "#2F497B" },
-  pink: { label: "Flower pink", body: "#FF9EC7", stripes: "#2F497B", wings: "#2F497B" },
+  gold: { label: "Honey Gold", body: "#FDB104", stripes: "#2F497B", wings: "#2F497B" },
+  navy: { label: "Night Blue", body: "#2F497B", stripes: "#FDB104", wings: "#8FB3E8" },
+  green: { label: "Leaf Green", body: "#7ED957", stripes: "#2F497B", wings: "#2F497B" },
+  pink: { label: "Flower Pink", body: "#FF9EC7", stripes: "#2F497B", wings: "#2F497B" },
   purple: { label: "Lavender", body: "#B79CFF", stripes: "#2F497B", wings: "#2F497B" },
 };
 
@@ -25,6 +25,8 @@ export function BeeMascot({
   const c = BEE_COLORS[color];
   return (
     <svg viewBox="0 0 230 200" className={cn("overflow-visible", className)} aria-hidden="true" focusable="false">
+      {/* capes and robes go behind everything */}
+      {wearing.length > 0 && <BeeAccessories wearing={wearing} part="back" />}
       {/* wings */}
       <ellipse cx="74" cy="34" rx="17" ry="32" transform="rotate(-22 74 34)" fill={c.wings} />
       <ellipse cx="112" cy="27" rx="15" ry="29" transform="rotate(14 112 27)" fill={c.wings} />

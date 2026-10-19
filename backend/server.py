@@ -1,4 +1,4 @@
-"""Bee Spelling backend: the 10-word quiz and the personalized word lists.
+"""BuzzWords backend: the 10-word quiz and the personalized word lists.
 
 Run (from this folder):
     .venv\\Scripts\\python -m uvicorn server:app --reload --port 8000
@@ -56,7 +56,7 @@ WORD_BY_TEXT = {entry["word"]: entry for entry in ALL_WORDS}
 # so requests take turns: load a student's data in, run, save it back out.
 _recommender_lock = threading.Lock()
 
-app = FastAPI(title="Bee Spelling backend")
+app = FastAPI(title="BuzzWords backend")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],

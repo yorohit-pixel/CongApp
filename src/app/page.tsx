@@ -37,7 +37,7 @@ export default function HomePage() {
             <div className="flex flex-wrap items-baseline gap-x-6 lg:-ml-10">
               <HandHeading id="my-words-heading">My Word Hives</HandHeading>
               <Link href="/my-words" className="text-lg font-bold text-ink underline underline-offset-4">
-                See all my words
+                See All My Words
               </Link>
             </div>
             <TileGrid className="mt-3 lg:mt-3">
@@ -48,14 +48,14 @@ export default function HomePage() {
                 <li>
                   <TileLink href="/create" className="h-full w-full">
                     <PlusIcon size="2rem" />
-                    <span className="text-[1.4rem] font-bold">Make a new set</span>
+                    <span className="text-[1.4rem] font-bold">Make a New Set</span>
                   </TileLink>
                 </li>
               )}
               <li>
                 <TileLink href="/personalized" className="h-full w-full">
                   <StarIcon size="2rem" className="text-gold" />
-                  <span className="text-[1.4rem] font-bold">Practice for you</span>
+                  <span className="text-[1.4rem] font-bold">Practice for You</span>
                   <span className="text-lg">Your 10 words, picked just for you</span>
                 </TileLink>
               </li>
@@ -66,7 +66,7 @@ export default function HomePage() {
             <div className="flex flex-wrap items-baseline gap-x-6 lg:-ml-5">
               <HandHeading id="games-heading">Games</HandHeading>
               <Link href="/games" className="text-lg font-bold text-ink underline underline-offset-4">
-                See all games
+                See All Games
               </Link>
             </div>
             <GameTiles className="mt-3 lg:mt-1" />
@@ -76,13 +76,13 @@ export default function HomePage() {
             <div className="flex flex-wrap items-baseline gap-x-6 lg:-ml-5">
               <HandHeading id="community-heading">Community Hive</HandHeading>
               <Link href="/community" className="text-lg font-bold text-ink underline underline-offset-4">
-                Search community sets
+                Search Community Sets
               </Link>
             </div>
             <TileGrid className="mt-3 lg:mt-1">
               <li>
                 <TileLink href="/daily-word" className="h-full w-full" aria-label={`Daily word: ${data.daily.word.text}`}>
-                  <span className="text-lg">daily word !</span>
+                  <span className="text-lg">Daily Word!</span>
                   <span className="text-[2rem] font-bold">{data.daily.word.text}</span>
                 </TileLink>
               </li>

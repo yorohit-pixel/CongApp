@@ -8,7 +8,7 @@ import { createSet } from "@/services";
 export default function CreateSetPage() {
   const router = useRouter();
   return (
-    <PageShell title="Create a set">
+    <PageShell title="Create a Set">
       <SetEditor
         cancelHref="/my-words"
         onSave={async (input) => {

@@ -18,18 +18,18 @@ export default function PersonalizedPage() {
   const setNumber = data?.rec.setNumber;
 
   return (
-    <PageShell title={setNumber ? `Word list ${setNumber}` : "Practice for you"}>
+    <PageShell title={setNumber ? `Word List ${setNumber}` : "Practice for You"}>
       {error ? (
-        <ErrorState message={error} action={<PillLink href="/">Go home</PillLink>} />
+        <ErrorState message={error} action={<PillLink href="/">Go Home</PillLink>} />
       ) : loading || !data ? (
         <LoadingState label="Looking at your recent practice…" />
       ) : data.rec.words.length === 0 ? (
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-2xl font-bold text-ink">Nothing tricky found yet!</p>
+          <p className="text-2xl font-bold text-ink">Nothing Tricky Found Yet!</p>
           <p className="mt-2 text-lg text-ink">Practice a word set or take the personalization test, then come back here.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-4">
-            <PillLink href="/onboarding" variant="gold">Take the personalization test</PillLink>
-            <PillLink href="/my-words">Go to My words</PillLink>
+            <PillLink href="/onboarding" variant="gold">Take the Personalization Test</PillLink>
+            <PillLink href="/my-words">Go to My Words</PillLink>
           </div>
         </div>
       ) : (
@@ -43,7 +43,7 @@ export default function PersonalizedPage() {
           </p>
           {data.rec.focusAreas.length > 0 && (
             <section aria-labelledby="focus-heading" className="mt-8">
-              <HandHeading id="focus-heading">What we noticed</HandHeading>
+              <HandHeading id="focus-heading">What We Noticed</HandHeading>
               <ul className="mt-4 grid gap-5 md:grid-cols-3">
                 {data.rec.focusAreas.map((area) => (
                   <li key={area.pattern.tag} className="card-pop rounded-[2.5rem] bg-white p-7 text-ink">
@@ -66,7 +66,7 @@ export default function PersonalizedPage() {
 
           <div className="mt-10 flex justify-center">
             <PillLink href={`/practice/${PERSONALIZED_SOURCE_ID}`} variant="gold" size="lg" icon={<ArrowRightIcon size="2.2rem" />}>
-              Start practice ({data.rec.words.length} words)
+              Start Practice ({data.rec.words.length} words)
             </PillLink>
           </div>
         </div>

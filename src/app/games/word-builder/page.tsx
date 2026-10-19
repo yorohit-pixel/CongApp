@@ -3,7 +3,7 @@ import { GameLoader } from "@/components/games/GameLoader";
 
 export default function WordBuilderPage() {
   return (
-    <PageShell title="Build the word" layout="focus" withBeeTrack>
+    <PageShell title="Build the Word" layout="focus" withBeeTrack>
       <GameLoader game="word-builder" />
     </PageShell>
   );

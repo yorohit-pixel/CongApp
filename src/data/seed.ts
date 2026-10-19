@@ -27,7 +27,7 @@ export const SEED_MY_SETS: WordSet[] = [];
 export const SEED_COMMUNITY_SETS: CommunitySet[] = [
   {
     id: "cs-vowel-teams",
-    title: "Vowel team adventure",
+    title: "Vowel Team Adventure",
     description: "ai, ay, ee and ea words to read and spell.",
     creatorName: "Ms. Rivera",
     language: "en",
@@ -38,7 +38,7 @@ export const SEED_COMMUNITY_SETS: CommunitySet[] = [
   },
   {
     id: "cs-animals",
-    title: "Animal friends",
+    title: "Animal Friends",
     description: "Spell the names of animals from the farm, the pond and the sea.",
     creatorName: "Jayden K.",
     language: "en",
@@ -49,7 +49,7 @@ export const SEED_COMMUNITY_SETS: CommunitySet[] = [
   },
   {
     id: "cs-tion",
-    title: "Words that end in -tion",
+    title: "Words That End in -tion",
     description: "Practice the 'shun' ending.",
     creatorName: "Mr. Okafor",
     language: "en",
@@ -60,7 +60,7 @@ export const SEED_COMMUNITY_SETS: CommunitySet[] = [
   },
   {
     id: "cs-silent",
-    title: "Sneaky silent letters",
+    title: "Sneaky Silent Letters",
     description: "Letters you can see but can't hear.",
     creatorName: "Priya S.",
     language: "en",
@@ -71,7 +71,7 @@ export const SEED_COMMUNITY_SETS: CommunitySet[] = [
   },
   {
     id: "cs-bees",
-    title: "All about bees",
+    title: "All About Bees",
     description: "Bee and garden words for a science unit.",
     creatorName: "Hive Club",
     language: "en",
@@ -117,7 +117,7 @@ export const SEED_HISTORY: SessionResult[] = [
     id: "res-seed-2",
     sourceId: "cs-vowel-teams",
     sourceKind: "community",
-    title: "Vowel team adventure",
+    title: "Vowel Team Adventure",
     completedAt: "2026-10-10T22:00:00.000Z",
     attempts: [
       attempt("w-rain", "rain", true),

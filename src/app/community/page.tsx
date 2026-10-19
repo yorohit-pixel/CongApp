@@ -27,7 +27,7 @@ export default function CommunityPage() {
   }, [debounced]);
 
   return (
-    <PageShell title="Community sets">
+    <PageShell title="Community Sets">
       <HandHeading className="lg:-ml-10">Community Hive</HandHeading>
       <p className="mt-1 max-w-2xl text-lg text-ink">Word sets made by other students and teachers. Open one to practice it or save it to My words.</p>
 
@@ -59,7 +59,7 @@ export default function CommunityPage() {
           ))}
           {query && (
             <button type="button" onClick={() => setQuery("")} className="min-h-11 px-3 text-base font-bold text-ink underline underline-offset-4">
-              Clear search
+              Clear Search
             </button>
           )}
         </div>

@@ -24,7 +24,7 @@ export default function DailyWordPage() {
     : "";
 
   return (
-    <PageShell title="Daily word" layout="focus">
+    <PageShell title="Daily Word" layout="focus">
       {loading || !word || !data ? (
         <LoadingState />
       ) : (
@@ -44,7 +44,7 @@ export default function DailyWordPage() {
               className="mt-5 inline-flex min-h-14 items-center gap-3 rounded-full border border-black px-6 text-xl font-bold text-ink hover:bg-[#FFF6DA] disabled:opacity-40"
             >
               <SpeakerIcon size="2.2rem" className="text-black" />
-              Hear it
+              Hear It
             </button>
             {!speech.available && <p className="mt-2 text-base text-ink">Sound isn't available in this browser.</p>}
           </div>
@@ -55,11 +55,11 @@ export default function DailyWordPage() {
               <dd className="mt-1 text-2xl font-bold text-ink">{word.definition}</dd>
             </div>
             <div className="card-pop rounded-[2rem] bg-white p-6">
-              <dt className="text-lg font-bold text-ink/80">Use it in a sentence</dt>
+              <dt className="text-lg font-bold text-ink/80">Use It in a Sentence</dt>
               <dd className="mt-1 text-xl text-ink">{word.exampleSentence}</dd>
             </div>
             <div className="card-pop rounded-[2rem] bg-white p-6">
-              <dt className="text-lg font-bold text-ink/80">Spelling pattern</dt>
+              <dt className="text-lg font-bold text-ink/80">Spelling Pattern</dt>
               <dd className="mt-1 text-xl text-ink">
                 <span className="font-bold">{getPattern(word.patterns[0]).label}.</span> {getPattern(word.patterns[0]).tip}
               </dd>
@@ -80,7 +80,7 @@ export default function DailyWordPage() {
               {data.saved ? "Saved" : "Save to My words"}
             </PillButton>
             <PillLink href={`/practice/${DAILY_SOURCE_ID}`} variant="gold" size="lg" icon={<ArrowRightIcon size="2rem" />}>
-              Practice this word
+              Practice This Word
             </PillLink>
           </div>
           <div aria-live="polite" className="mt-4">

@@ -49,7 +49,7 @@ export function AssessmentSummaryView({ summary }: { summary: AssessmentSummary 
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-4">
         <PillLink href="/personalized" variant="gold" size="lg" icon={<ArrowRightIcon size="2rem" />}>
-          See my practice words
+          See My Practice Words
         </PillLink>
         <PillLink href="/" size="lg" icon={<HouseIcon size="2rem" className="text-navy" />}>
           Home

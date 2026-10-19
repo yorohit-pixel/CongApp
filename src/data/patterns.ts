@@ -4,7 +4,7 @@ import type { PatternInfo, PatternTag } from "@/lib/types";
 export const PATTERNS: Record<PatternTag, PatternInfo> = {
   "short-vowel": {
     tag: "short-vowel",
-    label: "Short vowel sounds",
+    label: "Short Vowel Sounds",
     tip: "Short vowels say their quick sound, like the a in cat.",
     example: "cat, bed, sit",
   },
@@ -46,13 +46,13 @@ export const PATTERNS: Record<PatternTag, PatternInfo> = {
   },
   blend: {
     tag: "blend",
-    label: "Consonant blends",
+    label: "Consonant Blends",
     tip: "Two or three consonants side by side, and you hear each one.",
     example: "stop, frog, splash",
   },
   "double-consonant": {
     tag: "double-consonant",
-    label: "Double letters",
+    label: "Double Letters",
     tip: "After a short vowel, we often double the next consonant.",
     example: "rabbit, hopping",
   },
@@ -70,13 +70,13 @@ export const PATTERNS: Record<PatternTag, PatternInfo> = {
   },
   "silent-letter": {
     tag: "silent-letter",
-    label: "Silent letters",
+    label: "Silent Letters",
     tip: "Some words have a letter you can't hear, like the k in knee.",
     example: "knee, write, lamb",
   },
   multisyllable: {
     tag: "multisyllable",
-    label: "Longer words",
+    label: "Longer Words",
     tip: "Clap the word into chunks and spell one chunk at a time.",
     example: "fan-tas-tic",
   },

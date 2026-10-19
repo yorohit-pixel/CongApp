@@ -10,7 +10,7 @@ export function BeeColorPicker() {
   const { beeColor, setBeeColor, wearing } = useBuddy();
   return (
     <fieldset>
-      <legend className="mb-3 text-lg font-bold text-ink">Pick Buzz's colour</legend>
+      <legend className="mb-3 text-lg font-bold text-ink">Pick Buzz's Colour</legend>
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-5 lg:grid-cols-3">
         {(Object.keys(BEE_COLORS) as BeeColor[]).map((color) => {
           const selected = beeColor === color;

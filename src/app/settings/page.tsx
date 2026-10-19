@@ -19,7 +19,7 @@ import type { SpeechRate } from "@/lib/types";
 type Tab = "settings" | "profile";
 const TABS: Array<{ id: Tab; label: string }> = [
   { id: "settings", label: "Settings" },
-  { id: "profile", label: "My profile" },
+  { id: "profile", label: "My Profile" },
 ];
 
 /** Settings, with the student's profile in its own tab ("/settings?tab=profile" opens it). */
@@ -134,7 +134,7 @@ function SettingsPanel() {
             disabled={!speech.available}
             onClick={() => void speech.say("Hi! I'm Buzz. Let's practice some words together!")}
           >
-            Test the voice
+            Test the Voice
           </PillButton>
           {!speech.available && <p className="mt-2 text-base text-ink">Sound isn't available in this browser.</p>}
           <div className="mt-4 divide-y divide-black/15">

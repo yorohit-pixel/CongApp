@@ -16,7 +16,7 @@ export default function EditSetPage() {
   return (
     <PageShell title={set ? `Edit: ${set.title}` : "Edit set"}>
       {loading && <LoadingState />}
-      {!loading && !set && <ErrorState message="We couldn't find that set." action={<PillLink href="/my-words">Back to My words</PillLink>} />}
+      {!loading && !set && <ErrorState message="We couldn't find that set." action={<PillLink href="/my-words">Back to My Words</PillLink>} />}
       {set && (
         <SetEditor
           initial={set}

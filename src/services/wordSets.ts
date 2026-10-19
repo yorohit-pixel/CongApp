@@ -90,7 +90,7 @@ export async function saveBankWordToMyWords(bankWordId: string): Promise<WordSet
   if (!set) {
     set = {
       id: SAVED_WORDS_SET_ID,
-      title: "Saved words",
+      title: "Saved Words",
       description: "Words you saved from Daily Word.",
       language: "en",
       words: [],

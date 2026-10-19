@@ -9,7 +9,7 @@ export const GAMES = [
   },
   {
     href: "/games/word-builder",
-    title: "Build the word",
+    title: "Build the Word",
     text: "Put the letter tiles in the right order.",
     art: "t a c",
   },

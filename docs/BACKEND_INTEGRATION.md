@@ -56,6 +56,8 @@ When a set is saved, the mock looks up each word in the word bank and fills in `
 | `buyAccessory(id)` | `HiveState` — throws a child-friendly error if there isn't enough honey | `POST /me/hive/accessories/:id` |
 | `equipAccessory(id)` / `takeOffAccessory(slot)` | `HiveState` | `PUT` / `DELETE /me/hive/equipped/:slot` |
 | `recordGameResult(result: GameResultInput)` | `HiveState` | `POST /me/games` — add one honey drop per first-try answer |
+| `getEarnedBadgeCount()` | `number` | Worked out in the browser from `computeBadges` (25 badges) |
+| `claimBadgePrize(id)` | `HiveState` — throws a child-friendly error if not enough badges | `POST /me/hive/prizes/:id` — badge prizes (`badgesNeeded` in `src/data/accessories.ts`) are free outfits unlocked at 3, 6, 10, 15, 20 and 25 badges; check the count on the server |
 
 - **Honey earned** = words spelled right in practice (`SessionResult` attempts with `correct: true`) + honey from games. **Balance** = earned − spent. Check the balance on the server before a purchase.
 - **Streak** counts days in a row with any practice or game. It still counts if today isn't done yet but yesterday was. `best` is the longest run ever. The mock's rules are in `src/lib/streak.ts`.

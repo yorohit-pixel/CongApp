@@ -187,7 +187,7 @@ export interface ProgressSummary {
 /* ---------- Hive: honey, streaks and bee accessories ---------- */
 
 /** Where an accessory sits on the bee. One item per slot can be worn. */
-export type AccessorySlot = "head" | "face" | "neck";
+export type AccessorySlot = "head" | "face" | "neck" | "body" | "feet";
 
 export type AccessoryId =
   | "party-hat"
@@ -202,14 +202,23 @@ export type AccessoryId =
   | "star-glasses"
   | "bowtie"
   | "scarf"
-  | "medal";
+  | "medal"
+  // Badge prizes (clothing unlocked by earning badges)
+  | "sweater"
+  | "rain-boots"
+  | "tutu"
+  | "cape"
+  | "jacket"
+  | "royal-robe";
 
 export interface Accessory {
   id: AccessoryId;
   name: string;
   slot: AccessorySlot;
-  /** Cost in honey drops. */
+  /** Cost in honey drops (0 for badge prizes). */
   price: number;
+  /** Badge prizes: free once the student has earned this many badges. */
+  badgesNeeded?: number;
 }
 
 export interface StreakInfo {

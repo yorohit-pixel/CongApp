@@ -16,7 +16,7 @@ import type { Feedback } from "@/hooks/usePracticeSession";
 
 export const SECTION_NAMES: Record<AssessmentActivity, string> = {
   "hear-and-type": "Spelling",
-  "sound-match": "Sound match",
+  "sound-match": "Sound Match",
 };
 const SECTION_ORDER: AssessmentActivity[] = ["hear-and-type", "sound-match"];
 const SECTION_INTROS: Record<AssessmentActivity, string> = {
@@ -108,7 +108,7 @@ function SectionIntro({
         Section {number}: {SECTION_NAMES[activity]}
       </h2>
       <PillButton size="lg" variant="gold" className="mt-8 min-w-[12rem]" onClick={onStart} icon={<ArrowRightIcon size="2.4rem" />}>
-        Start section {number}
+        Start Section {number}
       </PillButton>
       <BuzzSays className="mt-12 w-full text-left" text={`${SECTION_INTROS[activity]} There ${count === 1 ? "is 1 question" : `are ${count} questions`}.`} />
     </div>
@@ -192,7 +192,7 @@ function HearAndType({ item, onDone }: { item: HearAndTypeItem; onDone: (r: Asse
       <p className="mt-2 text-lg text-ink">Tap the speaker to hear the word.</p>
       <div className="relative mt-10 w-full lg:mt-14">
         <label htmlFor="assessment-answer" className="sr-only">
-          Type the word you hear
+          Type the Word You Hear
         </label>
         <AnswerPill
           ref={inputRef}
@@ -222,7 +222,7 @@ function HearAndType({ item, onDone }: { item: HearAndTypeItem; onDone: (r: Asse
         <div className="mt-3 text-center text-base text-ink">
           <p>Sound isn't working in this browser. Ask a grown-up to read the word to you.</p>
           <details className="mt-1">
-            <summary className="cursor-pointer font-bold underline underline-offset-4">For a grown-up helper</summary>
+            <summary className="cursor-pointer font-bold underline underline-offset-4">For a Grown-up Helper</summary>
             <p className="mt-1">Please read this word out loud: {item.answer}</p>
           </details>
         </div>
@@ -254,7 +254,7 @@ function SoundMatch({ item, onDone }: { item: SoundMatchItem; onDone: (r: Assess
         Hear “{item.targetWord}”
       </PillButton>
       <fieldset className="mt-8 w-full">
-        <legend className="sr-only">Choose a word</legend>
+        <legend className="sr-only">Choose a Word</legend>
         <div className="grid gap-4 sm:grid-cols-3">
           {item.choices.map((choice) => {
             const selected = picked === choice;

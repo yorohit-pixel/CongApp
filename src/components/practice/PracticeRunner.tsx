@@ -88,7 +88,7 @@ export function PracticeRunner({
       >
         <div className="relative w-full">
           <label htmlFor="answer" className="sr-only">
-            Type the spelling of the word
+            Type the Spelling of the Word
           </label>
           <AnswerPill
             id="answer"
@@ -138,7 +138,7 @@ export function PracticeRunner({
             />
             <p className="mt-2 text-center">
               <button type="button" onClick={session.toggleHint} aria-expanded className="min-h-11 px-3 text-base font-bold text-ink underline underline-offset-4">
-                Hide hint
+                Hide Hint
               </button>
             </p>
           </div>
@@ -150,7 +150,7 @@ export function PracticeRunner({
 
         {item.status === "incorrect" && item.tries >= 2 && (
           <p className="mt-2 text-center">
-            <PillButton onClick={session.reveal}>Show me the word</PillButton>
+            <PillButton onClick={session.reveal}>Show Me the Word</PillButton>
           </p>
         )}
 

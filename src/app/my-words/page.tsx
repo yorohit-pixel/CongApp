@@ -13,7 +13,7 @@ export default function MyWordsPage() {
   const { data: sets, loading } = useAsync(getMySets, []);
 
   return (
-    <PageShell title="My words">
+    <PageShell title="My Words">
       <HandHeading className="lg:-ml-10">My Word Hives</HandHeading>
       <p className="mt-1 max-w-2xl text-lg text-ink">Open a set to review the words, practice, or make changes.</p>
       {loading || !sets ? (
@@ -26,7 +26,7 @@ export default function MyWordsPage() {
           <li>
             <TileLink href="/create" dashed className="h-full w-full">
               <PlusIcon size="2.4rem" />
-              <span className="text-[1.4rem] font-bold">Make a new set</span>
+              <span className="text-[1.4rem] font-bold">Make a New Set</span>
             </TileLink>
           </li>
         </TileGrid>

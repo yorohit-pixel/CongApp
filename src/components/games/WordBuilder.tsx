@@ -176,10 +176,10 @@ function BuildRound({
         )}
         {status === "incorrect" && (
           <PillButton variant="gold" onClick={retry}>
-            Try again
+            Try Again
           </PillButton>
         )}
-        {status === "incorrect" && wrongTries >= 2 && <PillButton onClick={showMe}>Show me the word</PillButton>}
+        {status === "incorrect" && wrongTries >= 2 && <PillButton onClick={showMe}>Show Me the Word</PillButton>}
         <button
           ref={nextRef}
           type="button"

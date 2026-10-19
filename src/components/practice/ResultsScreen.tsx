@@ -80,12 +80,12 @@ export function ResultsScreen({
         className="rounded-[2.2rem] border-[3px] border-panel bg-cream px-4 py-5 sm:px-7"
       >
         <h2 id="word-list-heading" className="sr-only">
-          Your words
+          Your Words
         </h2>
         <div className="mb-3 grid grid-cols-[2.5rem_1fr_1fr] gap-3 text-center text-base font-bold text-ink sm:grid-cols-[3rem_1fr_1fr] sm:gap-5" aria-hidden="true">
           <span />
-          <span>You typed</span>
-          <span>Correct spelling</span>
+          <span>You Typed</span>
+          <span>Correct Spelling</span>
         </div>
         <ol className="results-scroll max-h-[34rem] space-y-4 overflow-y-auto pr-1" tabIndex={0} aria-label="Word results">
           {attempts.map((a, i) => (

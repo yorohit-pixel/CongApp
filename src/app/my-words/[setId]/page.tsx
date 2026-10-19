@@ -20,7 +20,7 @@ export default function SetDetailPage() {
   return (
     <PageShell title={set?.title ?? "My words"}>
       {loading && <LoadingState />}
-      {!loading && !set && <ErrorState message="We couldn't find that set." action={<PillLink href="/my-words">Back to My words</PillLink>} />}
+      {!loading && !set && <ErrorState message="We couldn't find that set." action={<PillLink href="/my-words">Back to My Words</PillLink>} />}
       {set && (
         <div className="mx-auto max-w-5xl">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
@@ -43,14 +43,14 @@ export default function SetDetailPage() {
               </PillButton>
             </div>
           </div>
-          <h2 className="mt-10 text-2xl font-bold text-ink">Review the words</h2>
+          <h2 className="mt-10 text-2xl font-bold text-ink">Review the Words</h2>
           <p className="text-lg text-ink/80">Tap the speaker to hear a word.</p>
           <WordList words={set.words} language={set.language} className="mt-4" />
         </div>
       )}
       <ConfirmDialog
         open={confirming}
-        title="Delete this set?"
+        title="Delete This Set?"
         message={`“${set?.title ?? ""}” will be removed from My words.`}
         confirmLabel="Yes, delete it"
         onCancel={() => setConfirming(false)}

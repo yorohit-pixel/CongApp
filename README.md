@@ -1,4 +1,4 @@
-# Bee Spelling
+# BuzzWords
 
 Friendly reading and spelling practice for kids, including children with dyslexia, built for the Congressional App Challenge.
 

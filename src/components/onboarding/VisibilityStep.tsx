@@ -7,7 +7,7 @@ import { PillButton } from "../ui/PillButton";
 export function VisibilityStep({ onDone }: { onDone: () => void }) {
   return (
     <div className="mx-auto max-w-5xl">
-      <h2 className="text-center text-[1.8rem] font-bold text-ink">Make it easy to see</h2>
+      <h2 className="text-center text-[1.8rem] font-bold text-ink">Make It Easy to See</h2>
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
         <section aria-label="Visibility settings" className="card-pop rounded-[2.5rem] bg-white p-6 sm:p-10">
           <VisibilityControls />

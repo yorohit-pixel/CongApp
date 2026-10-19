@@ -17,7 +17,75 @@ function Star({ cx, cy, r, fill }: { cx: number; cy: number; r: number; fill: st
   return <polygon points={points} fill={fill} stroke={NAVY} strokeWidth="2.5" strokeLinejoin="round" />;
 }
 
+const PURPLE = "#6B4FBB";
+const GOLD = "#FFE066";
+
+/** The bee's middle, for clothes that follow the body's shape. */
+const SHIRT = "M26 96 C36 62 76 44 118 42 C140 41 156 45 166 52 C172 90 172 142 164 184 C130 198 70 198 32 172 C20 148 20 120 26 96 Z";
+const CAPE = "M172 70 C130 18 30 6 -16 46 C-28 108 -12 172 28 208 C78 216 124 196 152 162 Z";
+
+/** Parts drawn BEHIND the bee's body (capes and robes). */
+const BACK: Partial<Record<AccessoryId, React.ReactNode>> = {
+  cape: <path d={CAPE} fill={RED} stroke={NAVY} strokeWidth="3" strokeLinejoin="round" />,
+  "royal-robe": (
+    <g>
+      <path d="M174 64 C122 24 20 30 -6 78 C-18 136 4 188 44 212 C90 218 132 198 158 164 Z" fill={PURPLE} stroke="#FFFFFF" strokeWidth="10" strokeLinejoin="round" />
+      <path d="M174 64 C122 24 20 30 -6 78 C-18 136 4 188 44 212 C90 218 132 198 158 164 Z" fill="none" stroke={NAVY} strokeWidth="2.5" strokeLinejoin="round" />
+      {[[-8, 110], [-6, 150], [10, 186], [40, 210], [60, 36], [110, 34]].map(([x, y]) => (
+        <circle key={`${x}-${y}`} cx={x} cy={y} r="2.2" fill="#1F1F1F" />
+      ))}
+    </g>
+  ),
+};
+
 const DRAWINGS: Record<AccessoryId, React.ReactNode> = {
+  sweater: (
+    <g>
+      <path d={SHIRT} fill="#4FC3F7" stroke={NAVY} strokeWidth="3" strokeLinejoin="round" />
+      <path d="M30 98 L166 90 M26 128 L168 122 M34 158 L166 154" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" />
+      <path d="M161 54 C167 92 167 142 159 180" stroke="#0288D1" strokeWidth="9" fill="none" strokeLinecap="round" />
+    </g>
+  ),
+  jacket: (
+    <g>
+      <path d={SHIRT} fill="#C62828" stroke={NAVY} strokeWidth="3" strokeLinejoin="round" />
+      <path d="M161 54 C167 92 167 142 159 180" stroke="#FFFFFF" strokeWidth="9" fill="none" strokeLinecap="round" />
+      <path d="M34 168 C70 190 124 190 162 178" stroke="#FFFFFF" strokeWidth="7" fill="none" strokeLinecap="round" />
+      <circle cx="96" cy="112" r="24" fill={GOLD} stroke={NAVY} strokeWidth="3" />
+      <text x="96" y="122" textAnchor="middle" fontSize="27" fontWeight="800" fill={NAVY} fontFamily="Arial, sans-serif">A+</text>
+    </g>
+  ),
+  tutu: (
+    <g stroke={NAVY} strokeWidth="2.5" strokeLinejoin="round">
+      <path
+        d="M34 148 Q70 166 104 166 Q140 166 174 150 L184 176 Q170 188 158 180 Q148 198 128 188 Q112 204 96 190 Q80 202 66 188 Q50 196 42 180 Q24 182 28 164 Z"
+        fill="#FFB3D1"
+      />
+      <path d="M34 148 Q70 166 104 166 Q140 166 174 150" fill="none" stroke={PINK} strokeWidth="7" />
+      <Star cx={70} cy={178} r={5} fill="#FFFFFF" />
+      <Star cx={120} cy={180} r={5} fill="#FFFFFF" />
+      <Star cx={160} cy={168} r={4} fill="#FFFFFF" />
+    </g>
+  ),
+  cape: (
+    <g stroke={NAVY} strokeWidth="2.5" strokeLinejoin="round">
+      <path d="M150 112 L172 120 L150 132 Z" fill={RED} />
+      <circle cx="160" cy="122" r="7" fill={GOLD} />
+    </g>
+  ),
+  "royal-robe": (
+    <g stroke={NAVY} strokeWidth="2.5">
+      <path d="M150 110 Q162 124 152 140" fill="none" stroke={GOLD} strokeWidth="5" />
+      <circle cx="158" cy="124" r="7" fill={GOLD} />
+    </g>
+  ),
+  "rain-boots": (
+    <g strokeLinecap="round" strokeLinejoin="round">
+      <path d="M88 186 L86 204 M132 184 L134 202" stroke={NAVY} strokeWidth="5" />
+      <path d="M76 200 h20 v10 a4 4 0 0 1 -4 4 h-20 a6 6 0 0 1 -2 -8 z" fill={GOLD} stroke={NAVY} strokeWidth="3" />
+      <path d="M124 198 h20 v10 a4 4 0 0 1 -4 4 h-20 a6 6 0 0 1 -2 -8 z" fill={GOLD} stroke={NAVY} strokeWidth="3" />
+    </g>
+  ),
   "party-hat": (
     <g>
       <polygon points="166,56 212,48 194,2" fill={PINK} stroke={NAVY} strokeWidth="3" strokeLinejoin="round" />
@@ -127,13 +195,22 @@ const DRAWINGS: Record<AccessoryId, React.ReactNode> = {
 
 /** Each layer is enlarged around the point where it sits on the bee, so items read clearly even on small bees. */
 const LAYER_SCALE: Array<{ cx: number; cy: number; k: number }> = [
+  { cx: 110, cy: 190, k: 1 }, // feet
+  { cx: 100, cy: 120, k: 1 }, // body (outfits follow the body, so no enlarging)
   { cx: 192, cy: 128, k: 1.4 }, // neck
   { cx: 190, cy: 93, k: 1.3 }, // face
   { cx: 190, cy: 56, k: 1.6 }, // head
 ];
 
-export function BeeAccessories({ wearing }: { wearing: AccessoryId[] }) {
-  // Neck first, then face, then head, so hats sit on top.
+/**
+ * part="front" (default) draws on top of the bee; part="back" draws the bits that go
+ * behind its body (BeeMascot renders that before the body).
+ */
+export function BeeAccessories({ wearing, part = "front" }: { wearing: AccessoryId[]; part?: "front" | "back" }) {
+  if (part === "back") {
+    return <>{wearing.map((id) => BACK[id] && <g key={id}>{BACK[id]}</g>)}</>;
+  }
+  // Feet, then outfits, then neck, face and head, so hats sit on top.
   const order: AccessoryId[] = [...wearing].sort((a, b) => layer(a) - layer(b));
   return (
     <>
@@ -150,7 +227,9 @@ export function BeeAccessories({ wearing }: { wearing: AccessoryId[] }) {
 }
 
 function layer(id: AccessoryId): number {
-  if (["bowtie", "scarf", "medal"].includes(id)) return 0;
-  if (["glasses", "sunglasses", "star-glasses"].includes(id)) return 1;
-  return 2;
+  if (id === "rain-boots") return 0;
+  if (["sweater", "jacket", "tutu", "cape", "royal-robe"].includes(id)) return 1;
+  if (["bowtie", "scarf", "medal"].includes(id)) return 2;
+  if (["glasses", "sunglasses", "star-glasses"].includes(id)) return 3;
+  return 4;
 }

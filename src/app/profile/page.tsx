@@ -12,7 +12,7 @@ export default function ProfileRedirect() {
     router.replace("/settings?tab=profile");
   }, [router]);
   return (
-    <PageShell title="My profile">
+    <PageShell title="My Profile">
       <LoadingState />
     </PageShell>
   );

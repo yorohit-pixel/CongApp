@@ -31,7 +31,7 @@ export function VoicePicker({ className }: { className?: string }) {
 
   return (
     <fieldset className={className}>
-      <legend className="mb-1 text-xl font-bold text-ink">Buzz's voice</legend>
+      <legend className="mb-1 text-xl font-bold text-ink">Buzz's Voice</legend>
       <p className="mb-3 text-base text-ink/80">Tap a voice to hear it. “Automatic” picks the friendliest voice on this device.</p>
       <div className="flex flex-wrap gap-3">
         {options.map((option) => {

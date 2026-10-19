@@ -1,6 +1,6 @@
 # Project notes for Claude Code
 
-Bee Spelling: a bee/honeycomb-themed reading and spelling practice website for kids, including children with dyslexia. Built for the Congressional App Challenge by two students.
+BuzzWords: a bee/honeycomb-themed reading and spelling practice website for kids, including children with dyslexia. Built for the Congressional App Challenge by two students.
 
 ## Scope
 - I build the frontend and UI/UX (Next.js, `src/`). My friend builds the backend.

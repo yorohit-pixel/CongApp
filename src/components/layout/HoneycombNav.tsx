@@ -98,13 +98,13 @@ export function HoneycombNav({ className }: { className?: string }) {
 
   const links: HexLink[] = [
     { href: "/", label: "Home", col: 0, row: "top", icon: <HexIconHome />, isActive: (p) => p === "/" },
-    { href: "/create", label: "Create a word set", col: 0, row: "bottom", icon: <HexIconPlus />, isActive: (p) => p.startsWith("/create") },
+    { href: "/create", label: "Create a Word Set", col: 0, row: "bottom", icon: <HexIconPlus />, isActive: (p) => p.startsWith("/create") },
     { href: "/games", label: "Games", col: 1, row: "mid", icon: <HexIconGames />, isActive: (p) => p.startsWith("/games") },
-    { href: "/shop", label: "Honey shop", col: 2, row: "top", icon: <HexIconShop />, isActive: (p) => p.startsWith("/shop") },
-    { href: "/badges", label: "My badges", col: 2, row: "bottom", icon: <HexIconBadge />, isActive: (p) => p.startsWith("/badges") },
+    { href: "/shop", label: "Honey Shop", col: 2, row: "top", icon: <HexIconShop />, isActive: (p) => p.startsWith("/shop") },
+    { href: "/badges", label: "My Badges", col: 2, row: "bottom", icon: <HexIconBadge />, isActive: (p) => p.startsWith("/badges") },
     {
       href: "/settings",
-      label: "Settings and my profile",
+      label: "Settings and My Profile",
       col: 3,
       row: "mid",
       icon: <HexIconGear />,

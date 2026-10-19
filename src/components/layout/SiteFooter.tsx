@@ -4,10 +4,10 @@ import { BeeMascot } from "./BeeMascot";
 
 const LINKS = [
   { href: "/games", label: "Games" },
-  { href: "/shop", label: "Honey shop" },
+  { href: "/shop", label: "Honey Shop" },
   { href: "/badges", label: "Badges" },
   { href: "/streak", label: "Streak" },
-  { href: "/settings?tab=profile", label: "My profile" },
+  { href: "/settings?tab=profile", label: "My Profile" },
   { href: "/settings", label: "Settings" },
 ];
 
@@ -21,7 +21,7 @@ export function SiteFooter() {
         <div className="flex items-center gap-4">
           <BeeMascot className="h-auto w-16" />
           <div>
-            <p className="font-hand text-[2rem] leading-none">Bee Spelling</p>
+            <p className="font-hand text-[2rem] leading-none">BuzzWords</p>
             <p className="text-base text-white/90">A little practice every day makes a big buzz.</p>
           </div>
         </div>

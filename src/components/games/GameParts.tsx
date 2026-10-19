@@ -69,10 +69,10 @@ export function GameDone({ game, results, onPlayAgain }: { game: GameKind; resul
       )}
       <div className="mt-8 flex flex-wrap justify-center gap-4">
         <PillButton variant="gold" size="lg" onClick={onPlayAgain}>
-          Play again
+          Play Again
         </PillButton>
         <PillLink href="/games" size="lg">
-          More games
+          More Games
         </PillLink>
         <PillLink href="/" size="lg" icon={<HouseIcon size="2rem" className="text-navy" />}>
           Home

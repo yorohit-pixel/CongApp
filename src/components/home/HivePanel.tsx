@@ -33,7 +33,7 @@ function DailyGoal({ today, goalMet, streak }: { today: number; goalMet: boolean
   const filled = Math.min(today, DAILY_GOAL);
   return (
     <div className="flex flex-col items-center justify-center card-pop rounded-[2.5rem] bg-white px-6 py-5 text-center lg:w-[17rem]">
-      <h2 className="text-xl font-bold text-ink">Today's goal</h2>
+      <h2 className="text-xl font-bold text-ink">Today's Goal</h2>
       <p className="text-lg text-ink">
         {goalMet ? "✓ Goal done! Super busy bee!" : `${filled} of ${DAILY_GOAL} words`}
       </p>
@@ -74,7 +74,7 @@ function HoneyJar({ drops }: { drops: number }) {
         </text>
       </svg>
       <div>
-        <h2 className="text-xl font-bold text-ink">My honey jar</h2>
+        <h2 className="text-xl font-bold text-ink">My Honey Jar</h2>
         <p className="mt-1 inline-flex items-center gap-1 text-[1.6rem] font-bold text-ink">
           <HoneyDropIcon size="1.6rem" />
           {drops}
@@ -85,7 +85,7 @@ function HoneyJar({ drops }: { drops: number }) {
         {fullJars > 0 && <p className="text-base font-bold text-ink">✓ {fullJars} full {fullJars === 1 ? "jar" : "jars"}</p>}
         <p className="sr-only">You get one honey drop for every word you spell right.</p>
         <Link href="/shop" className="mt-1 inline-flex min-h-11 items-center text-base font-bold text-ink underline underline-offset-4">
-          Spend in the honey shop
+          Spend in the Honey Shop
         </Link>
       </div>
     </div>
