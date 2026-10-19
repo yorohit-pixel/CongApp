@@ -24,7 +24,8 @@ export type PatternTag =
   | "letter-reversal";
 
 export interface PatternInfo {
-  tag: PatternTag;
+  /** A PatternTag, or a backend word type such as "vowel_ough" (see backend/word_types.py). */
+  tag: PatternTag | (string & {});
   /** Child-friendly name shown in the UI. */
   label: string;
   /** One short sentence that explains the pattern. */
@@ -126,6 +127,8 @@ export interface WordAttempt {
   usedHint: boolean;
   patterns: PatternTag[];
   bankWordId?: string;
+  /** What was typed on the first check (the recommender learns from first tries). */
+  firstTyped?: string;
 }
 
 export interface SessionResult {
@@ -148,9 +151,11 @@ export interface FocusArea {
 
 export interface Recommendation {
   generatedAt: string;
+  /** Which 10-word list this is (1 = the list made from the assessment quiz). Backend only. */
+  setNumber?: number;
   focusAreas: FocusArea[];
   /** Words selected from the word bank, never generated. */
-  words: Array<BankWord & { matchedPattern: PatternTag }>;
+  words: Array<BankWord & { matchedPattern: PatternTag | (string & {}) }>;
 }
 
 export interface DailyWord {

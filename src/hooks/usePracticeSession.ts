@@ -14,6 +14,8 @@ export interface Feedback {
 
 interface ItemState {
   typed: string;
+  /** What was typed on the first check. */
+  firstTyped: string | null;
   status: ItemStatus;
   tries: number;
   usedHint: boolean;
@@ -21,7 +23,7 @@ interface ItemState {
   feedback: Feedback | null;
 }
 
-const freshItem: ItemState = { typed: "", status: "idle", tries: 0, usedHint: false, hintOpen: false, feedback: null };
+const freshItem: ItemState = { typed: "", firstTyped: null, status: "idle", tries: 0, usedHint: false, hintOpen: false, feedback: null };
 
 /**
  * All practice-session rules live here, separate from the UI:
@@ -56,6 +58,7 @@ export function usePracticeSession(initialItems: PracticeItem[]) {
       }
       const outcome = checkSpelling(s.typed, current.answer);
       const tries = s.tries + 1;
+      if (s.firstTyped === null) s = { ...s, firstTyped: s.typed.trim() };
       if (s.status === "revealed") {
         // Copying the revealed word is practice, but it still counts as "needs practice".
         return outcome.status === "incorrect"
@@ -112,6 +115,7 @@ export function usePracticeSession(initialItems: PracticeItem[]) {
       usedHint: item.usedHint,
       patterns: current.patterns,
       bankWordId: current.bankWordId,
+      firstTyped: item.firstTyped ?? item.typed.trim(),
     };
     setAttempts((a) => [...a, attempt]);
     if (index + 1 >= items.length) {

@@ -1,5 +1,7 @@
 # Backend integration guide
 
+> **The Python backend is in [`/backend`](../backend/README.md).** It already powers the check-in's 10 spelling words and the "Practice for you" 10-word lists (see *Python backend: quiz and word lists* below). Turn it on with `NEXT_PUBLIC_API_URL=http://localhost:8000` in `.env.local`. Everything else below still runs on mock data and can move to the backend the same way.
+
 Everything the UI needs from the backend goes through **`src/services/`**. Each function is `async`, returns the types in **`src/lib/types.ts`**, and is currently backed by a mock database (`src/services/mock/db.ts`) that saves to the browser's localStorage.
 
 ## How to connect the backend
@@ -80,7 +82,22 @@ When a set is saved, the mock looks up each word in the word bank and fills in `
 
 A word is recorded as **correct** if the student got it right before moving on (after any number of tries). If they used "Show me the word", it is recorded as **not correct**.
 
-### Personalized Practice — `services/recommendations.ts`
+### Python backend: quiz and word lists — `services/api.ts`, `assessment.ts`, `recommendations.ts`
+
+Already connected when `NEXT_PUBLIC_API_URL` is set:
+
+| Frontend function | Calls | What happens |
+|---|---|---|
+| `getAssessmentItems(grade)` | `GET /quiz?grade=` | 10 random dataset words, easiest → hardest, mixed word types. The sound-match section still comes from `src/data/seed.ts`. |
+| `submitAssessment(grade, responses)` | `POST /students/:id/quiz` | Each first-try spelling goes through `recordMistake`; `findWords` picks **list 1**. `practiceAreas` = the recommender's top 3 word types. |
+| `getRecommendations()` | `GET /students/:id/word-list` | The current 10-word list (`Recommendation.setNumber`), shown on "Practice for you" as "Word list N". |
+| `submitSessionResult(result)` for `"personalized"` | `POST /students/:id/word-list/answers` | First full run of the list only: answers (`WordAttempt.firstTyped`) go through `recordMistake`, the level adjusts, and `findWords` picks the next list. |
+
+- The student id is `profile.id` (a new one per demo visit). Replace it with the signed-in user's id when accounts exist.
+- Backend word types (e.g. `vowel_ough`) are mapped to the frontend's `PatternTag`s for hints in `toPatternTags` (`api.ts`). `PatternInfo.tag` and `matchedPattern` can hold either.
+- Dataset `difficulty` (about 5–230) is squeezed into the UI's 1–5 by `toDifficulty`.
+
+### Personalized Practice (mock) — `services/recommendations.ts`
 | `getRecommendations()` | `Recommendation` | `GET /me/recommendations` |
 
 The UI shows `focusAreas` (pattern, tip, example, reason) and `words`, and starts practice with those words. **No words are generated** — they are selected from the predefined word bank. The mock's logic is in `src/lib/recommend.ts` as a reference:

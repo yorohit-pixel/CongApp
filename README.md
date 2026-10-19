@@ -1,6 +1,9 @@
-# Bee Spelling — Frontend
+# Bee Spelling
 
-Friendly reading and spelling practice for kids, including children with dyslexia, built for the Congressional App Challenge. This folder is the **frontend only**: it runs entirely on mock data so the backend can be connected later.
+Friendly reading and spelling practice for kids, including children with dyslexia, built for the Congressional App Challenge.
+
+- **Frontend** (this folder): Next.js website.
+- **Backend** ([`backend/`](backend/README.md)): Python (FastAPI) around our spelling recommender. It picks the 10-word check-in quiz from a 20,000-word dataset, then builds each personalized 10-word list from the student's answers.
 
 Built with **Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS 4**.
 
@@ -26,7 +29,13 @@ Other commands:
 | `npm start` | Serve the production build |
 | `npm run typecheck` | TypeScript check only |
 
-No API keys, `.env` file or database are needed.
+No API keys or database are needed. On its own, the website uses built-in demo data.
+
+### With the Python backend
+
+1. Start the backend (see [backend/README.md](backend/README.md)): `cd backend`, set up the venv, then `uvicorn server:app --reload --port 8000`.
+2. Copy `.env.example` to `.env.local` (it sets `NEXT_PUBLIC_API_URL=http://localhost:8000`).
+3. Run `npm run dev`. The check-in's spelling words and "Practice for you" lists now come from the recommender.
 
 > **Fonts:** Open Sans, Patrick Hand (the handwritten headings) and Atkinson Hyperlegible (easy-read mode) come from Google Fonts through `next/font`. They are downloaded once during `npm run dev` / `npm run build`, then served locally.
 

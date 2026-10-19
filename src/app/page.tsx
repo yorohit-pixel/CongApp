@@ -56,7 +56,7 @@ export default function HomePage() {
                 <TileLink href="/personalized" className="h-full w-full">
                   <StarIcon size="2rem" className="text-gold" />
                   <span className="text-[1.4rem] font-bold">Practice for you</span>
-                  <span className="text-lg">Words picked from the patterns you find tricky</span>
+                  <span className="text-lg">10 words picked from your answers</span>
                 </TileLink>
               </li>
             </TileGrid>

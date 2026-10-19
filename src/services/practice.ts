@@ -33,7 +33,7 @@ export async function getPracticeSession(sourceId: string): Promise<PracticeSess
     return {
       sourceId,
       sourceKind: "personalized",
-      title: "Practice for you",
+      title: rec.setNumber ? `Word list ${rec.setNumber}` : "Practice for you",
       items: rec.words.map((w) => ({
         id: `p-${w.id}`,
         answer: w.text,

@@ -17,6 +17,7 @@ import type {
   StudentProfile,
   WordSet,
 } from "@/lib/types";
+import { makeId } from "@/lib/id";
 import { DEFAULT_SETTINGS } from "@/lib/types";
 
 export interface MockDb {
@@ -61,7 +62,8 @@ function seed(): MockDb {
     mySets: SEED_MY_SETS,
     communitySets: SEED_COMMUNITY_SETS,
     history: SEED_HISTORY,
-    profile: SEED_PROFILE,
+    // A new id per demo student, so the Python backend keeps each one's word lists apart.
+    profile: { ...SEED_PROFILE, id: makeId("student") },
     settings: DEFAULT_SETTINGS,
     assessment: null,
     hive: { spent: 0, owned: [], equipped: {}, games: [] },

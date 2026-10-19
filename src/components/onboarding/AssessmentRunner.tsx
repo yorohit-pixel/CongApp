@@ -142,6 +142,7 @@ function HearAndType({ item, onDone }: { item: HearAndTypeItem; onDone: (r: Asse
   const [state, setState] = useState<"idle" | "correct" | "incorrect">("idle");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const firstResult = useRef<boolean | null>(null);
+  const firstTyped = useRef("");
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => inputRef.current?.focus(), []);
@@ -152,7 +153,10 @@ function HearAndType({ item, onDone }: { item: HearAndTypeItem; onDone: (r: Asse
       return;
     }
     const ok = checkSpelling(typed, item.answer).status !== "incorrect";
-    if (firstResult.current === null) firstResult.current = ok;
+    if (firstResult.current === null) {
+      firstResult.current = ok;
+      firstTyped.current = typed.trim();
+    }
     setState(ok ? "correct" : "incorrect");
     setFeedback(
       ok
@@ -168,8 +172,10 @@ function HearAndType({ item, onDone }: { item: HearAndTypeItem; onDone: (r: Asse
         return;
       }
       firstResult.current = checkSpelling(typed, item.answer).status !== "incorrect";
+      firstTyped.current = typed.trim();
     }
-    onDone({ itemId: item.id, activity: item.activity, patterns: item.patterns, correct: firstResult.current, response: typed.trim(), answer: item.answer });
+    // The first try is what's scored and what the recommender learns from.
+    onDone({ itemId: item.id, activity: item.activity, patterns: item.patterns, correct: firstResult.current, response: firstTyped.current, answer: item.answer });
   };
 
   return (

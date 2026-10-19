@@ -7,8 +7,10 @@
  *   3. Select related words from the PREDEFINED word bank.
  * Nothing is generated: every recommended word already exists in the bank.
  */
-import { getPattern } from "@/data/patterns";
+import { getPattern, PATTERNS } from "@/data/patterns";
 import type { AssessmentSummary, BankWord, FocusArea, Grade, PatternTag, Recommendation, SessionResult } from "./types";
+
+const isPatternTag = (tag: string): tag is PatternTag => tag in PATTERNS;
 
 interface PatternStats {
   practiced: number;
@@ -40,6 +42,8 @@ export function findFocusAreas(history: SessionResult[], assessment: AssessmentS
     }
   }
   for (const area of assessment?.practiceAreas ?? []) {
+    // Backend word types (e.g. "vowel_ough") aren't mock pattern tags; skip those.
+    if (!isPatternTag(area.tag)) continue;
     const s = bump(area.tag);
     s.fromAssessment = true;
     s.missed += 2;
@@ -76,6 +80,7 @@ export function selectWordsFromBank(
 
   for (const area of focusAreas) {
     const tag = area.pattern.tag;
+    if (!isPatternTag(tag)) continue;
     const candidates = bank
       .filter((w) => w.patterns.includes(tag) && !mastered.has(w.id) && !chosen.has(w.id))
       // Closest to the student's grade first, then easier words first.
