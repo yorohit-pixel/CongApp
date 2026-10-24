@@ -1,5 +1,6 @@
 import { BuzzSays } from "../buddy/BuzzSays";
 import { SettingsPreview, VisibilityControls } from "../settings/VisibilityControls";
+import { VoicePicker } from "../settings/VoicePicker";
 import { ArrowRightIcon } from "../ui/Icons";
 import { PillButton } from "../ui/PillButton";
 
@@ -11,6 +12,7 @@ export function VisibilityStep({ onDone }: { onDone: () => void }) {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
         <section aria-label="Visibility settings" className="card-pop rounded-[2.5rem] bg-white p-6 sm:p-10">
           <VisibilityControls />
+          <VoicePicker simple className="mt-6 border-t border-black/15 pt-6" />
         </section>
         <SettingsPreview className="lg:sticky lg:top-6" />
       </div>
@@ -21,7 +23,7 @@ export function VisibilityStep({ onDone }: { onDone: () => void }) {
       </div>
       <BuzzSays
         className="mx-auto mt-12 max-w-3xl"
-        text="Let's make the words easy for you to see. Try bigger letters or a different page colour. You can change these later in Settings."
+        text="Let's make the words easy for you to see and hear. Try bigger letters, a different page colour, or a new voice for me. You can change these later in Settings."
       />
     </div>
   );

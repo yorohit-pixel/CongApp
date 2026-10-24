@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useSettings } from "@/context/SettingsProvider";
-import { useSpeech } from "@/hooks/useSpeech";
+import { useWordSpeaker } from "@/hooks/useSpeech";
 import type { Feedback } from "@/hooks/usePracticeSession";
 import { cn } from "@/lib/cn";
-import { scrambleTiles } from "@/lib/games";
+import { buildPieces, scrambleTiles } from "@/lib/games";
 import type { BankWord } from "@/lib/types";
 import { BeeTrack } from "../layout/BeeTrack";
 import { FeedbackLine } from "../practice/FeedbackLine";
@@ -14,7 +14,7 @@ import { ArrowRightIcon, SpeakerIcon } from "../ui/Icons";
 import { PillButton, pillClasses } from "../ui/PillButton";
 import { GameDone, HoneycombScore, RoundLabel } from "./GameParts";
 
-/** "Build the word" — hear a word, then tap the letter tiles in the right order. */
+/** "Build the Word": hear a word, then tap the tiles in order (letters, or syllables for long words). */
 export function WordBuilder({ words, onPlayAgain }: { words: BankWord[]; onPlayAgain: () => void }) {
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState<boolean[]>([]);
@@ -50,16 +50,19 @@ function BuildRound({
   results: boolean[];
   onDone: (firstTry: boolean) => void;
 }) {
-  const tiles = useMemo(() => scrambleTiles(word.text), [word.text]);
+  const pieces = useMemo(() => buildPieces(word.text, word.syllables), [word.text, word.syllables]);
+  const tiles = useMemo(() => scrambleTiles(pieces), [pieces]);
+  const chunks = pieces.length < word.text.length; // syllable tiles instead of letters
   const [placed, setPlaced] = useState<string[]>([]); // tile ids, in order
   const [wrongTries, setWrongTries] = useState(0);
   const [status, setStatus] = useState<"building" | "correct" | "incorrect" | "shown">("building");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
-  const speech = useSpeech();
+  const speech = useWordSpeaker(word.text, word.syllables);
   const { settings } = useSettings();
   const nextRef = useRef<HTMLButtonElement>(null);
   const tileById = new Map(tiles.map((t) => [t.id, t]));
-  const built = placed.map((id) => tileById.get(id)!.letter).join("");
+  const placedPieces = placed.map((id) => tileById.get(id)!.piece);
+  const built = placedPieces.join("");
   const finished = status === "correct" || status === "shown";
 
   useEffect(() => {
@@ -76,7 +79,7 @@ function BuildRound({
     const next = [...placed, id];
     setPlaced(next);
     if (next.length < tiles.length) return;
-    const attempt = next.map((tid) => tileById.get(tid)!.letter).join("");
+    const attempt = next.map((tid) => tileById.get(tid)!.piece).join("");
     if (attempt === word.text) {
       setStatus("correct");
       setFeedback({ tone: "correct", message: `You built “${word.text}”!` });
@@ -113,12 +116,12 @@ function BuildRound({
       </div>
       <div className="mt-6 flex items-center gap-3">
         <h2 id="builder-prompt" className="text-center text-[1.45rem] font-bold text-ink">
-          Listen, then tap the letters in order.
+          {chunks ? "Listen, then tap the pieces in order." : "Listen, then tap the letters in order."}
         </h2>
         <IconControl
           icon={<SpeakerIcon size="3.4rem" />}
-          label={speech.available ? "Hear the word" : "Sound is not available in this browser"}
-          onClick={() => void speech.say(word.text)}
+          label={speech.available ? (speech.nextInParts ? "Hear the word in parts" : "Hear the word") : "Sound is not available in this browser"}
+          onClick={speech.hear}
           disabled={!speech.available}
         />
       </div>
@@ -130,22 +133,25 @@ function BuildRound({
           "mt-6 flex min-h-[5.5rem] flex-wrap justify-center gap-2 rounded-full border border-black px-6 py-3",
           status === "correct" ? "bg-correct" : status === "incorrect" ? "bg-incorrect" : "bg-white",
         )}
-        aria-label={built ? `Your word so far: ${Array.from(built).join(" ")}` : "Your word is empty"}
+        aria-label={built ? `Your word so far: ${placedPieces.join(" ")}` : "Your word is empty"}
         role="status"
       >
         {Array.from({ length: tiles.length }, (_, i) => (
           <span
             key={i}
             aria-hidden="true"
-            className="grid h-16 w-12 place-items-center border-b-4 border-ink font-easy text-[2.4rem] font-bold text-ink"
+            className={cn(
+              "grid h-16 place-items-center border-b-4 border-ink font-easy text-[2.4rem] font-bold text-ink",
+              chunks ? "min-w-[5rem] px-1" : "w-12",
+            )}
           >
-            {status === "shown" ? word.text[i] : built[i] ?? ""}
+            {status === "shown" ? pieces[i] : placedPieces[i] ?? ""}
           </span>
         ))}
       </div>
 
       {/* Letter tiles */}
-      <div className="mt-6 flex flex-wrap justify-center gap-3" role="group" aria-label="Letter tiles">
+      <div className="mt-6 flex flex-wrap justify-center gap-3" role="group" aria-label={chunks ? "Word piece tiles" : "Letter tiles"}>
         {tiles.map((tile) => {
           const used = placed.includes(tile.id);
           return (
@@ -154,13 +160,13 @@ function BuildRound({
               type="button"
               onClick={() => place(tile.id)}
               disabled={used || status !== "building"}
-              aria-label={`Letter ${tile.letter}`}
+              aria-label={chunks ? `Piece ${tile.piece}` : `Letter ${tile.piece}`}
               className={cn(
-                "grid h-[4.6rem] w-[4.6rem] place-items-center rounded-[1.3rem] border-2 border-black font-easy text-[2.4rem] font-bold text-ink",
+                "grid h-[4.6rem] min-w-[4.6rem] place-items-center rounded-[1.3rem] border-2 border-black px-3 font-easy text-[2.4rem] font-bold text-ink",
                 used ? "border-dashed bg-transparent text-transparent" : "bg-gold hover:bg-[#F2A400]",
               )}
             >
-              {tile.letter}
+              {tile.piece}
             </button>
           );
         })}

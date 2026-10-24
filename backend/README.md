@@ -44,6 +44,8 @@ Then in the website folder, copy `.env.example` to `.env.local` (it has `NEXT_PU
 | POST | `/students/{id}/start` | `{grade}` | `WordList`: list 1 from the grade alone, for students who skip the check-in (keeps existing lists) |
 | GET | `/students/{id}/word-list` | — | `WordList` (404 before the quiz or skip) |
 | POST | `/students/{id}/word-list/answers` | `{answers: [{word, typed}]}` | `WordList` (the next list) |
+| GET | `/games/words?game=&grade=&studentId=` | — | `{level, words}`: words at the student's level. `missing-piece`: 2+ syllables. `word-builder`: short words at low levels, longer words above that |
+| GET | `/daily?grade=&date=YYYY-MM-DD` | — | `{date, grade, pattern, words[3]}`: one word type and 3 words with it, easy → hard for the grade (same for everyone on a date) |
 | GET | `/students/{id}` | — | Everything saved for the student |
 | GET | `/health` | — | Word counts |
 

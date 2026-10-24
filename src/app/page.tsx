@@ -10,7 +10,7 @@ import { PlusIcon, StarIcon } from "@/components/ui/Icons";
 import { TileGrid, TileLink } from "@/components/ui/Tile";
 import { LoadingState } from "@/components/ui/Status";
 import { useAsync } from "@/hooks/useAsync";
-import { getDailyWord, getHistory, getMySets, getSavedCommunitySetIds, searchCommunitySets } from "@/services";
+import { getDailyChallenge, getHistory, getMySets, getSavedCommunitySetIds, searchCommunitySets } from "@/services";
 
 /** Home (designs 3 and 9): "My Word Hives" row, then "Community Hive" grid. */
 export default function HomePage() {
@@ -18,7 +18,7 @@ export default function HomePage() {
     const [mySets, community, daily, savedIds, history] = await Promise.all([
       getMySets(),
       searchCommunitySets(),
-      getDailyWord(),
+      getDailyChallenge(),
       getSavedCommunitySetIds(),
       getHistory(),
     ]);
@@ -30,7 +30,8 @@ export default function HomePage() {
       {loading || !data ? (
         <LoadingState />
       ) : (
-        <>
+        // Centred on wide screens, so there's no big empty gap on the right.
+        <div className="mx-auto w-full max-w-[1250px]">
           <HivePanel history={data.history} />
 
           <section aria-labelledby="my-words-heading" className="mt-6">
@@ -81,9 +82,10 @@ export default function HomePage() {
             </div>
             <TileGrid className="mt-3 lg:mt-1">
               <li>
-                <TileLink href="/daily-word" className="h-full w-full" aria-label={`Daily word: ${data.daily.word.text}`}>
-                  <span className="text-lg">Daily Word!</span>
-                  <span className="text-[2rem] font-bold">{data.daily.word.text}</span>
+                <TileLink href="/daily-word" className="h-full w-full">
+                  <span className="text-[1.4rem] font-bold">Daily Words!</span>
+                  <span className="text-lg">{data.daily.words.length} mystery words to try</span>
+                  <span className="text-base text-ink/80">Today: {data.daily.pattern.label}</span>
                 </TileLink>
               </li>
               {data.community.slice(0, 5).map((set) => (
@@ -92,8 +94,8 @@ export default function HomePage() {
             </TileGrid>
           </section>
 
-          <HomeGreeting className="mt-10 lg:max-w-[1250px]" />
-        </>
+          <HomeGreeting className="mt-10" />
+        </div>
       )}
     </PageShell>
   );

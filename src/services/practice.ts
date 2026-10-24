@@ -6,7 +6,7 @@
 import { findBankWord, findBankWordByText } from "@/data/wordBank";
 import type { Language, PracticeItem, PracticeSession, SetWord } from "@/lib/types";
 import { getCommunitySet } from "./community";
-import { getDailyWord } from "./dailyWord";
+import { getDailyChallenge } from "./dailyWord";
 import { getRecommendations } from "./recommendations";
 import { getMySet } from "./wordSets";
 
@@ -48,21 +48,21 @@ export async function getPracticeSession(sourceId: string): Promise<PracticeSess
   }
 
   if (sourceId === DAILY_SOURCE_ID) {
-    const { word } = await getDailyWord();
+    const { words } = await getDailyChallenge();
     return {
       sourceId,
       sourceKind: "daily",
-      title: "Daily Word",
-      items: [{
+      title: "Daily Words",
+      items: words.map((word) => ({
         id: `d-${word.id}`,
         answer: word.text,
         language: word.language,
         definition: word.definition,
-        exampleSentence: word.exampleSentence,
+        exampleSentence: word.exampleSentence || undefined,
         syllables: word.syllables,
         patterns: word.patterns,
         bankWordId: word.id,
-      }],
+      })),
     };
   }
 

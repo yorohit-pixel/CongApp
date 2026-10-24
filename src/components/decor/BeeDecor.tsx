@@ -47,7 +47,9 @@ export function Meadow({ className }: { className?: string }) {
     { x: 1380, c: "#FF9EC7", h: 34 },
   ];
   return (
-    <svg viewBox="0 0 1440 110" preserveAspectRatio="xMidYMax slice" className={cn("block h-[90px] w-full", className)} aria-hidden="true">
+    <svg viewBox="0 0 1440 110" preserveAspectRatio="xMidYMax slice"
+      // Height grows with the width so wide screens never cut off the flowers and hive.
+      className={cn("block aspect-[1440/110] min-h-[80px] w-full", className)} aria-hidden="true">
       {/* hills */}
       <path d="M0 80 C 200 50, 380 70, 560 62 S 920 44, 1100 62 S 1340 58, 1440 50 V110 H0z" fill="#9BD67A" />
       <path d="M0 92 C 240 72, 480 90, 720 80 S 1200 70, 1440 84 V110 H0z" fill="#7ED957" />

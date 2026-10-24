@@ -8,7 +8,7 @@ import { getVoiceOptions, speak, type VoiceOption } from "@/services";
 const SAMPLE = "Hi! I'm Buzz. Let's practice some words together!";
 
 /** "Buzz's voice": the browser's English voices, friendliest first. Choosing one plays a sample. */
-export function VoicePicker({ className }: { className?: string }) {
+export function VoicePicker({ className, simple = false }: { className?: string; /** Fewer choices: Automatic plus the 3 friendliest voices. */ simple?: boolean }) {
   const { settings, updateSettings } = useSettings();
   const [voices, setVoices] = useState<VoiceOption[] | null>(null);
 
@@ -26,13 +26,22 @@ export function VoicePicker({ className }: { className?: string }) {
 
   const options: Array<{ value: string | null; label: string; recommended: boolean }> = [
     { value: null, label: "Automatic", recommended: false },
-    ...voices.map((v) => ({ value: v.name, label: v.label, recommended: v.recommended })),
+    ...(simple ? voices.slice(0, 3) : voices).map((v) => ({ value: v.name, label: v.label, recommended: v.recommended })),
   ];
+  // Keep a voice chosen in Settings visible even if it isn't in the short list.
+  if (simple && settings.voiceName && !options.some((o) => o.value === settings.voiceName)) {
+    const chosen = voices.find((v) => v.name === settings.voiceName);
+    if (chosen) options.push({ value: chosen.name, label: chosen.label, recommended: chosen.recommended });
+  }
 
   return (
     <fieldset className={className}>
       <legend className="mb-1 text-xl font-bold text-ink">Buzz's Voice</legend>
-      <p className="mb-3 text-base text-ink/80">Tap a voice to hear it. “Automatic” picks the friendliest voice on this device.</p>
+      <p className="mb-3 text-base text-ink/80">
+        {simple
+          ? "This is the voice that reads words to you everywhere, even in the check-in. Tap one to hear it."
+          : "Tap a voice to hear it. “Automatic” picks the friendliest voice on this device."}
+      </p>
       <div className="flex flex-wrap gap-3">
         {options.map((option) => {
           const selected = settings.voiceName === option.value;

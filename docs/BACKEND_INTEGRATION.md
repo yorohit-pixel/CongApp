@@ -46,8 +46,8 @@ When a set is saved, the mock looks up each word in the word bank and fills in `
 | `getSavedCommunitySetIds()` | `string[]` | `GET /me/sets?source=community` |
 | `saveCommunitySetToMyWords(setId)` | `WordSet` (an editable copy with `source`) | `POST /community/sets/:id/save` — should be idempotent |
 
-### Daily Word — `services/dailyWord.ts`
-| `getDailyWord(date?)` | `DailyWord` | `GET /daily-word?date=YYYY-MM-DD` — same word for everyone on a date |
+### Daily Words — `services/dailyWord.ts`
+| `getDailyChallenge(date?)` | `DailyChallenge` (`pattern` + 3 `words`, easy → hard) | `GET /daily?grade=&date=YYYY-MM-DD` (built). The words are never shown before practice; `/practice/daily` practises all 3. |
 
 ### Hive: honey, streaks and the honey shop — `services/hive.ts`
 | Function | Returns | Suggested endpoint |
@@ -66,9 +66,9 @@ When a set is saved, the mock looks up each word in the word bank and fills in `
 ### Games — `services/games.ts`
 | Function | Returns | Suggested endpoint |
 |---|---|---|
-| `getGameWords(game: GameKind)` | `BankWord[]` (8 for `letter-detective`, 6 for `word-builder`) | `GET /games/:game/words` |
+| `getGameWords(game: GameKind)` | `BankWord[]` (8 for `missing-piece`, 6 for `word-builder`) | `GET /games/words?game=&grade=&studentId=` (built) |
 
-`letter-detective` needs words containing b, d or p (words tagged `letter-reversal` first). `word-builder` needs 3–7 letter words up to one grade above the student's. When a game ends, the UI calls `recordGameResult` (see Hive).
+Both games use words at the student's level (their word-list difficulty, or their grade before they have one). `missing-piece` hides one syllable and offers look-alike misspellings (`src/lib/games.ts`); `word-builder` uses letter tiles for short words and syllable tiles for words over 7 letters.
 
 **Honey jar and today's goal** on Home are also worked out in the browser (`src/lib/honey.ts`) from `getHistory()`: one honey drop per word spelled right, and the goal counts words practised today.
 

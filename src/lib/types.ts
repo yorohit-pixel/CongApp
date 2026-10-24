@@ -158,9 +158,11 @@ export interface Recommendation {
   words: Array<BankWord & { matchedPattern: PatternTag | (string & {}) }>;
 }
 
-export interface DailyWord {
+/** Daily Words: one spelling pattern a day and 3 words that use it, easiest first. The words stay hidden until practice. */
+export interface DailyChallenge {
   date: string;
-  word: BankWord;
+  pattern: PatternInfo;
+  words: BankWord[];
 }
 
 export type Grade = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
@@ -320,8 +322,12 @@ export interface AssessmentSummary {
 
 /* ---------- Games ---------- */
 
-/** "letter-detective": pick b, d or p to finish a word. "word-builder": put shuffled letter tiles in order. */
-export type GameKind = "letter-detective" | "word-builder";
+/**
+ * "missing-piece": a word with one syllable hidden; pick the right group of letters.
+ * "word-builder": put shuffled tiles in order (letters for short words, syllables for long ones).
+ * Both use words at the student's level.
+ */
+export type GameKind = "missing-piece" | "word-builder";
 
 /* ---------- Accessibility settings ---------- */
 

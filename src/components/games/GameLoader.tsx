@@ -6,7 +6,7 @@ import type { BankWord, GameKind } from "@/lib/types";
 import { getGameWords } from "@/services";
 import { ErrorState, LoadingState } from "../ui/Status";
 import { PillLink } from "../ui/PillButton";
-import { LetterDetective } from "./LetterDetective";
+import { MissingPiece } from "./MissingPiece";
 import { WordBuilder } from "./WordBuilder";
 
 /** Loads a fresh set of words for a game and restarts it on "Play again". */
@@ -19,8 +19,8 @@ export function GameLoader({ game }: { game: GameKind }) {
     return <ErrorState message="We couldn't find words for this game." action={<PillLink href="/games">Back to Games</PillLink>} />;
   }
   const playAgain = () => setPlayCount((n) => n + 1);
-  return game === "letter-detective" ? (
-    <LetterDetective key={playCount} words={data} onPlayAgain={playAgain} />
+  return game === "missing-piece" ? (
+    <MissingPiece key={playCount} words={data} onPlayAgain={playAgain} />
   ) : (
     <WordBuilder key={playCount} words={data} onPlayAgain={playAgain} />
   );

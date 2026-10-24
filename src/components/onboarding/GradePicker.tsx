@@ -34,7 +34,7 @@ export function GradePicker({
       <div className="w-full max-w-md text-left">
         <TextField
           id="student-name"
-          label="What's your first name? (You can skip this.)"
+          label="What's your first name?"
           placeholder="type your name"
           autoComplete="off"
           value={name}

@@ -1,10 +1,10 @@
 import { PageShell } from "@/components/layout/PageShell";
 import { GameLoader } from "@/components/games/GameLoader";
 
-export default function LetterDetectivePage() {
+export default function MissingPiecePage() {
   return (
-    <PageShell title="b or d?" layout="focus" withBeeTrack>
-      <GameLoader game="letter-detective" />
+    <PageShell title="Missing Piece" layout="focus" withBeeTrack>
+      <GameLoader game="missing-piece" />
     </PageShell>
   );
 }

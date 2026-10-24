@@ -342,3 +342,87 @@ def get_student(student_id: str):
     if state is None:
         raise HTTPException(status_code=404, detail="No student with that id yet.")
     return state
+
+
+# ---------- Games and Daily Words ----------
+
+GAME_ROUNDS = {"missing-piece": 8, "word-builder": 6}
+
+
+def has_clean_syllables(entry):
+    """The syllables join back into the word (so a game can hide one of them)."""
+    parts = [part for part in str(entry.get("syllable_spelling", "")).split("-") if part]
+    return len(parts) >= 2 and "".join(parts) == entry["word"]
+
+
+def student_level(student_id, grade):
+    """The student's current level: their word-list difficulty, or the middle of their grade's range."""
+    if student_id:
+        state = load_student(student_id)
+        if state is not None:
+            return state["targetDifficulty"]
+    low, high = GRADE_DIFFICULTY[grade]
+    return (low + high) // 2
+
+
+def near_level(words, level, at_least):
+    spread = 3
+    while True:
+        pool = [entry for entry in words if abs(entry["difficulty"] - level) <= spread]
+        if len(pool) >= at_least or spread > 40:
+            return pool
+        spread += 2
+
+
+@app.get("/games/words")
+def get_game_words(
+    game: str = Query(pattern="^(missing-piece|word-builder)$"),
+    grade: int = Query(3, ge=0, le=8),
+    studentId: str | None = None,
+):
+    """Words for a game at the student's level.
+    missing-piece: words with 2+ syllables (one syllable is hidden).
+    word-builder: short words at low levels (letter tiles), longer words with syllable tiles above that."""
+    level = student_level(studentId, grade)
+    if game == "missing-piece" or level >= 16:
+        candidates = [e for e in KID_WORDS if has_clean_syllables(e) and len(e["word"]) <= 12]
+    else:
+        candidates = [e for e in KID_WORDS if 3 <= len(e["word"]) <= 7]
+    pool = near_level(candidates, level, 40)
+    chosen = random.sample(pool, min(GAME_ROUNDS[game], len(pool)))
+    chosen.sort(key=lambda e: e["difficulty"])
+    return {"level": level, "words": [word_out(e) for e in chosen]}
+
+
+@app.get("/daily")
+def get_daily_words(grade: int = Query(3, ge=0, le=8), date: str = Query(pattern=r"^\d{4}-\d{2}-\d{2}$")):
+    """Daily Words: one spelling pattern a day and 3 words with it, easy -> hard for the grade.
+    The same for everyone in a grade on the same date."""
+    rng = random.Random(f"{date}-{grade}")
+    low, high = GRADE_DIFFICULTY[grade]
+    bands = [low, (low + high) // 2, high]
+
+    by_type = {}
+    for entry in KID_WORDS:
+        for word_type in entry.get("type", []):
+            if word_type != "non":
+                by_type.setdefault(word_type, []).append(entry)
+
+    def pick(word_type):
+        """One word per band, each harder than the last, or None if the pattern can't fill all three."""
+        picked, used, floor = [], set(), 0
+        for band in bands:
+            options = [e for e in by_type[word_type] if abs(e["difficulty"] - band) <= 3 and e["difficulty"] > floor and e["word"] not in used]
+            if not options:
+                return None
+            entry = rng.choice(sorted(options, key=lambda e: e["word"]))
+            picked.append(entry)
+            used.add(entry["word"])
+            floor = entry["difficulty"]
+        return picked
+
+    for word_type in rng.sample(sorted(by_type), len(by_type)):
+        words = pick(word_type)
+        if words:
+            return {"date": date, "grade": grade, "pattern": type_info(word_type), "words": [word_out(e) for e in words]}
+    raise HTTPException(status_code=404, detail="No daily words today.")
