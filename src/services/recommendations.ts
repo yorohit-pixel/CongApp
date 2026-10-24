@@ -9,7 +9,7 @@
 import { WORD_BANK } from "@/data/wordBank";
 import { findFocusAreas, selectWordsFromBank } from "@/lib/recommend";
 import type { Recommendation, WordAttempt } from "@/lib/types";
-import { api, ApiError, ApiWordList, studentId, toBankWord, toFocusArea, usingBackend } from "./api";
+import { api, ApiError, ApiWordList, isOffline, studentId, toBankWord, toFocusArea, usingBackend } from "./api";
 import { db, delay } from "./mock/db";
 
 /** The list the student is working on, so its answers are sent back only once. */
@@ -45,7 +45,8 @@ export async function getRecommendations(): Promise<Recommendation> {
       if (error instanceof ApiError && error.status === 404) {
         return { generatedAt: new Date().toISOString(), focusAreas: [], words: [] };
       }
-      throw error;
+      if (!isOffline(error)) throw error;
+      // Offline: fall through to the demo recommendations below.
     }
   }
   const { history, assessment, profile } = db();

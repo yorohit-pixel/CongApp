@@ -10,8 +10,23 @@ import { db } from "./mock/db";
 
 export const API_URL = (process.env.NEXT_PUBLIC_API_URL ?? "").replace(/\/$/, "");
 
+/** Set when the backend can't be reached; the rest of the visit then uses demo data. */
+let backendDown = false;
+/** Free hosting sleeps when idle and can take a while to wake up. */
+const TIMEOUT_MS = 25_000;
+
 export function usingBackend(): boolean {
-  return API_URL !== "";
+  return API_URL !== "" && !backendDown;
+}
+
+/** Wakes a sleeping backend early (called when the app opens), so the quiz is ready in time. */
+export function wakeBackend(): void {
+  if (usingBackend()) void fetch(`${API_URL}/health`).catch(() => undefined);
+}
+
+/** True for "couldn't reach the backend" (as opposed to the backend answering with an error). */
+export function isOffline(error: unknown): boolean {
+  return error instanceof ApiError && error.status === 0;
 }
 
 /** The backend keeps each student's recommender data under this id. */
@@ -31,8 +46,11 @@ export async function api<T>(path: string, init?: RequestInit): Promise<T> {
     res = await fetch(`${API_URL}${path}`, {
       ...init,
       headers: { "Content-Type": "application/json", ...init?.headers },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     });
   } catch {
+    backendDown = true;
+    console.warn("BuzzWords backend unreachable; using demo data for this visit.");
     throw new ApiError("We couldn't reach the word hive. Is the backend running?", 0);
   }
   if (!res.ok) {

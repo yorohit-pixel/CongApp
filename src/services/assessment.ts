@@ -18,7 +18,7 @@ import type {
   PatternTag,
   SpellingCheckAnswer,
 } from "@/lib/types";
-import { api, ApiWord, ApiWordList, studentId, toDifficulty, toFocusArea, toPatternTags, usingBackend } from "./api";
+import { api, ApiWord, ApiWordList, isOffline, studentId, toDifficulty, toFocusArea, toPatternTags, usingBackend } from "./api";
 import { db, delay, persist } from "./mock/db";
 import { rememberWordList } from "./recommendations";
 
@@ -49,8 +49,12 @@ export async function getAssessmentItems(grade: Grade): Promise<AssessmentItem[]
   let source = ASSESSMENT_ITEMS;
   if (usingBackend()) {
     // 10 random words from the dataset, getting harder, with mixed word types.
-    const quiz = await api<{ words: ApiWord[] }>(`/quiz?grade=${grade}`);
-    source = [...quiz.words.map(quizItem), ...ASSESSMENT_ITEMS.filter((i) => i.activity !== "hear-and-type")];
+    try {
+      const quiz = await api<{ words: ApiWord[] }>(`/quiz?grade=${grade}`);
+      source = [...quiz.words.map(quizItem), ...ASSESSMENT_ITEMS.filter((i) => i.activity !== "hear-and-type")];
+    } catch (error) {
+      if (!isOffline(error)) throw error; // offline: keep the demo words
+    }
   }
   currentItems = [...source].sort(
     // Stable sort: the backend's words are already in order, easiest first.
@@ -96,12 +100,16 @@ export async function submitAssessment(grade: Grade, responses: AssessmentRespon
 
   if (usingBackend()) {
     // The recommender learns from every typed answer and picks the first 10-word list.
-    const list = await api<ApiWordList>(`/students/${encodeURIComponent(studentId())}/quiz`, {
-      method: "POST",
-      body: JSON.stringify({ grade, answers: spelling.map((s) => ({ word: s.word, typed: s.typed })) }),
-    });
-    rememberWordList(list);
-    practiceAreas = list.focusAreas.map((a) => toFocusArea(a).pattern);
+    try {
+      const list = await api<ApiWordList>(`/students/${encodeURIComponent(studentId())}/quiz`, {
+        method: "POST",
+        body: JSON.stringify({ grade, answers: spelling.map((s) => ({ word: s.word, typed: s.typed })) }),
+      });
+      rememberWordList(list);
+      practiceAreas = list.focusAreas.map((a) => toFocusArea(a).pattern);
+    } catch (error) {
+      if (!isOffline(error)) throw error; // offline: keep the demo practice areas
+    }
   }
 
   const summary: AssessmentSummary = {
@@ -125,11 +133,15 @@ export async function submitAssessment(grade: Grade, responses: AssessmentRespon
  */
 export async function skipAssessment(grade: Grade): Promise<void> {
   if (usingBackend()) {
-    const list = await api<ApiWordList>(`/students/${encodeURIComponent(studentId())}/start`, {
-      method: "POST",
-      body: JSON.stringify({ grade }),
-    });
-    rememberWordList(list);
+    try {
+      const list = await api<ApiWordList>(`/students/${encodeURIComponent(studentId())}/start`, {
+        method: "POST",
+        body: JSON.stringify({ grade }),
+      });
+      rememberWordList(list);
+    } catch (error) {
+      if (!isOffline(error)) throw error;
+    }
   }
   db().profile = { ...db().profile, grade, onboardingComplete: true };
   persist();

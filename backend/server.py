@@ -18,6 +18,7 @@ Each student's recommender data is saved in students/<id>.json.
 """
 
 import json
+import os
 import random
 import re
 import threading
@@ -59,7 +60,10 @@ _recommender_lock = threading.Lock()
 app = FastAPI(title="BuzzWords backend")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    # Local dev, any address listed in ALLOWED_ORIGINS (comma-separated), and Vercel sites.
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"]
+    + [o.strip() for o in os.environ.get("ALLOWED_ORIGINS", "").split(",") if o.strip()],
+    allow_origin_regex=r"https://[a-z0-9-]+\.vercel\.app",
     allow_methods=["*"],
     allow_headers=["*"],
 )
