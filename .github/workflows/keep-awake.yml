@@ -1,0 +1,45 @@
+# Keeps the BuzzWords backend on Render's free plan from falling asleep,
+# so judges never wait for it to wake up.
+name: Keep backend awake
+
+on:
+  schedule:
+    - cron: "*/10 * * * *" # visit the backend every 10 minutes
+    - cron: "0 12 1 * *" # once a month: keep this workflow switched on
+  workflow_dispatch: # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write # for the monthly keep-alive commit
+  actions: write # for re-enabling this workflow
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Visit the backend
+        # Never fails the run (a sleepy or busy backend shouldn't send you failure emails).
+        run: |
+          curl -fsS --retry 3 --retry-delay 20 --max-time 90 https://buzzwords-backend.onrender.com/health \
+            || echo "The backend didn't answer this time; the next run will try again."
+
+  stay-enabled:
+    # GitHub switches scheduled workflows off after 60 days without a commit.
+    # Once a month this adds a tiny commit (a date in .github/keepalive.txt) so that never happens.
+    if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 12 1 * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Commit a keep-alive date stamp
+        run: |
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > .github/keepalive.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/keepalive.txt
+          git commit -m "Keep the keep-awake workflow active"
+          git push
+      - name: Make sure this workflow is switched on
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow enable keep-awake.yml --repo "${{ github.repository }}"
